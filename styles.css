@@ -1,0 +1,29 @@
+body {
+   font-family: "Helvetica Neue",Arial,Verdana;
+}
+
+.entries img {
+   max-width: 200px;
+   max-height : 200px;
+}
+
+h2 { 
+   margin: 0px; 
+   padding: 10px; 
+   font-weight: normal; 
+   color: #FFF; 
+   background-color: #CCC; 
+}
+
+h2 a {
+   text-decoration: none;
+   color: #fff;
+}
+
+a.next {
+   float: right;
+}
+
+a.prev {
+   float: left;
+}

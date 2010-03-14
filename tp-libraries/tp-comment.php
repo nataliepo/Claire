@@ -1,32 +1,30 @@
 <?php
-    define ("ROOT_TYPEPAD_API_URL", "http://api.typepad.com/");
-    include_once('utilities.php');
-
+    include_once('tp-utilities.php');
     
 
     class CommentListing {
         var $post_xid;
         var $comment_array;
 
-          
-         function get_comments_api_url () {
-            return ROOT_TYPEPAD_API_URL . 'assets/' . $this->post_xid . '/comments.json';
-        }
-        
-        function build_comment_listing () {
-            $comments_url = $this->get_comments_api_url();
 
-            $handle = fopen($comments_url, "rb");
-            $doc = stream_get_contents($handle);
-            $events = json_decode($doc);
-            
-            $i = 0;    
-            foreach($events->{'entries'} as $comment) {
-                $this->comment_array[$i] = new Comment($comment);
-                $i++;
-            }
-        }
+        function get_comments_api_url () {
+             return ROOT_TYPEPAD_API_URL . '/assets/' . $this->post_xid . '/comments.json';
+         }
 
+         function build_comment_listing () {
+             $comments_url = $this->get_comments_api_url();
+
+             $handle = fopen($comments_url, "rb");
+             $doc = stream_get_contents($handle);
+             $events = json_decode($doc);
+
+             $i = 0;    
+             foreach($events->{'entries'} as $comment) {
+                 $this->comment_array[$i] = new Comment($comment);
+                 $i++;
+             }
+         }
+         
         // contructor
         function CommentListing($post_xid = "") {
             $this->post_xid = $post_xid;
