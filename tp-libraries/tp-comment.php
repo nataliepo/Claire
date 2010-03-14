@@ -6,17 +6,8 @@
         var $post_xid;
         var $comment_array;
 
-
-        function get_comments_api_url () {
-             return ROOT_TYPEPAD_API_URL . '/assets/' . $this->post_xid . '/comments.json';
-         }
-
-         function build_comment_listing () {
-             $comments_url = $this->get_comments_api_url();
-
-             $handle = fopen($comments_url, "rb");
-             $doc = stream_get_contents($handle);
-             $events = json_decode($doc);
+         function build_comment_listing ($xid) {
+             $events = pull_json(get_comments_api_url($xid));
 
              $i = 0;    
              foreach($events->{'entries'} as $comment) {
@@ -29,7 +20,7 @@
         function CommentListing($post_xid = "") {
             $this->post_xid = $post_xid;
             $this->comment_listing = array();
-            $this->build_comment_listing();
+            $this->build_comment_listing($post_xid);
         }
         
         function get_post_xid() {

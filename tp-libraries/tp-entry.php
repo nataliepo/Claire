@@ -5,29 +5,15 @@
     class EntryListing {
         var $entry_array; 
           
-           function get_entries_api_url ($page_number) {
-              
-                return ROOT_TYPEPAD_API_URL . '/blogs/' . BLOG_XID . '/post-assets' . 
-                    # This doesn't work for some reason.
-                    #'/@published' . 
-                    '.json' .'?max-results=' . POSTS_PER_PAGE . 
-                    '&start-index=' . ((($page_number-1) * POSTS_PER_PAGE) + 1);
+          function build_entries_listing ($page_number) {
+             $events = pull_json(get_entries_api_url($page_number));
 
-            }
-
-            function build_entries_listing ($page_number) {
-                $entries_url = $this->get_entries_api_url($page_number);
-                                
-                $handle = fopen($entries_url, "rb");
-                $doc = stream_get_contents($handle);
-                $events = json_decode($doc);
-
-                $i = 0;    
-                foreach($events->{'entries'} as $entry) {
-                    $this->entry_array[$i] = new Entry($entry);
-                    $i++;
-                }
-            }
+             $i = 0;    
+             foreach($events->{'entries'} as $entry) {
+                 $this->entry_array[$i] = new Entry($entry->urlId, $entry);
+                 $i++;
+             }
+         }
   
 
         // contructor
@@ -54,19 +40,31 @@
     
 
 
-
 class Entry {
     var $title;
     var $body;
     var $permalink;
     var $thumbnail;
+    var $xid;
+    
+    var $comment_listing;
+    var $favorite_listing;
     
     // contructor
-    function Entry($entry_json) {
-        $this->title = get_entry_title($entry_json);
-        $this->body = $entry_json->content;
-        $this->permalink = $entry_json->permalinkUrl;
-        $this->thumbnail = get_first_thumbnail($entry_json->embeddedImageLinks);
+    //  TWO INPUT TYPES: a JSON entry object, or an XID.
+    // passing a JSON object reduces the number of requests.
+    // passing an XID makes another request to get lots of information.
+    function Entry($xid, $entry_json = '') {
+       if ($entry_json == '') {
+          $entry_json = pull_json(get_entry_api_url($xid));
+       }
+       
+       // otherwise, ($type == 'json'), format is ready to parse. 
+       $this->title = get_entry_title($entry_json);
+       $this->body = $entry_json->content;
+       $this->permalink = $entry_json->permalinkUrl;
+       $this->thumbnail = get_first_thumbnail($entry_json->embeddedImageLinks);
+       $this->xid = $entry_json->urlId;
     }
       
     function title () {
@@ -79,6 +77,30 @@ class Entry {
     
     function excerpt($size = 150) {
         return chop_str($this->body, $size);
+    }
+    
+    function build_comment_listing () {
+       $this->comment_listing = new CommentListing($this->xid);
+    }
+    
+    function build_favorite_listing() {
+       $this->favorite_listing = new FavoriteListing($this->xid);
+    }
+    
+    function comments() {
+      if (!$this->comment_listing) {
+         $this->build_comment_listing();
+      }
+       
+       return $this->comment_listing->comments();
+    }
+    
+    function favorites() {
+       if (!$this->favorite_listing) {
+          $this->build_favorite_listing();
+       }
+       
+       return $this->favorite_listing->favorites();
     }
 }
     

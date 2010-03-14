@@ -1,46 +1,75 @@
 <html>
     <head>
-        <title>braided</title>
-        <?php include_once('tp-libraries/tp-comment.php'); ?>
+        <?php 
+            include_once('tp-libraries/tp-utilities.php'); 
+     
+            // provide a post_xid just in case.
+            $post_xid = '6a00e5539faa3b88330120a7b004e2970b';
+                
+            if ( ($_SERVER['REQUEST_METHOD'] == 'GET') &&
+                ( $_GET['xid'])) {
+                    $post_xid = $_GET['xid'];
+            }
+            
+            $entry = new Entry($post_xid);
+            $comments = $entry->comments();   
+            $favorites = $entry->favorites();
+         ?>
+         <title>Rousseau: <?php echo $entry->title; ?></title>
+         
+
+     <link rel="stylesheet" href="styles.css" type="text/css" />
+
     </head>
         
     <body>
-        <h2>Rousseau Demo</h2>
+        <h2><a href="index.php">Rousseau Demo</a></h2>
         
-        <h4>Here are the comments for the blog post <a href="http://nataliepo.typepad.com/hobbitted/2010/01/plotzed.html">Plotzed</a>
-        from my <a href="http://nataliepo.typepad.com/hobbitted">Hobbited</a> blog.</h4>
+        <h3><?php echo $entry->title; ?></h3>
         
-        <?php
-            $post_xid = '6a00e5539faa3b88330120a7b004e2970b';
-                
-          /*  if ( ($_SERVER['REQUEST_METHOD'] == 'GET') &&
-                ( $_GET['xid'] != '')) {
-                    $post_xid = $_GET['xid'];
+      <div id="alpha">
+         <div class="entry-body">
+            <p><?php echo $entry->body; ?></p>
+         </div>
+      </div>
+      
+      <div id="beta"> 
+        
+        <div class="favorites">
+           <h5>Favorites</h5>
+          
+       <?php 
+            foreach ($favorites as $favorite) {
+               echo
+'<div class="favorite-avatar">
+   <a href="' . $favorite->author_profile_page_url . '"><img src="' . $favorite->author_avatar . '" /></a>
+</div>';
             }
-        */
-            
-            
-            $comment_listing = new CommentListing($post_xid);
-            $comments = $comment_listing->comments();
-
-            
-//            for ($i = 0; $i < sizeof($comments); $i++) {
-            foreach ($comments as $comment) {
+        ?> 
+           
+        </div>
+        
+        <div class="comments">
+           <h5>Comments</h5>
+        <?php
+            foreach ($entry->comments() as $comment) {
             
                 echo 
 '<div class="comment-outer">
     <div class="comment-avatar">
-        <img src="' . $comment->author_avatar. '" />
+        <a href="' . $comment->author_profile_page_url . '"<img src="' . $comment->author_avatar. '" /></a>
     </div>
     <div class="comment-contents">
-        <p>
-            <a href="' . $comment->author_profile_page_url . '">' . $comment->author_display_name . '</a>
-            said ' . $comment->content . '
-        </p>
+        <p>' . 
+            $comment->content . 
+        '</p>
     </div>
 </div>';
             }
         ?>
-    
+        </div>
+        
+        
+      </div> 
     </body>
 </html>

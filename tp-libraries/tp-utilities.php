@@ -1,7 +1,10 @@
 <?php
 
     include_once('tp-config.php');
-    
+
+    // default set in config.
+    global $debug_mode;
+    $debug_mode = DEFAULT_DEBUG_MODE;
     
 /*****
  * utility features mostly borrowed from Tydget's typepad_parsing.js
@@ -70,11 +73,44 @@ function get_first_thumbnail ($embedded_array) {
     return $embedded_array[0]->url;
 }
 
+function get_entries_api_url ($page_number) {
+    return ROOT_TYPEPAD_API_URL . '/blogs/' . BLOG_XID . '/post-assets' . 
+        # This doesn't work for some reason.
+        #'/@published' . 
+        '.json' .'?max-results=' . POSTS_PER_PAGE . 
+        '&start-index=' . ((($page_number-1) * POSTS_PER_PAGE) + 1);
+}
 
+function get_entry_api_url ($xid) {
+   return ROOT_TYPEPAD_API_URL . '/assets/' . $xid . '.json';
+}
 
+function get_comments_api_url ($xid) {
+     return ROOT_TYPEPAD_API_URL . '/assets/' . $xid . '/comments.json';
+}
 
+function get_favorites_api_url ($xid) {
+     return ROOT_TYPEPAD_API_URL . '/assets/' . $xid . '/favorites.json';
+}
+
+/** 
+ *   input: 
+ *    $URL -- a full string to scrape the json data from
+ *  output: 
+ *    a json-decoded php object.
+**/
+function pull_json ($url) { 
+   
+   if ($GLOBALS['debug_mode']) {
+      echo "<p class='debug'><font color='red'>[PULL_JSON], URL = <a href='$url'>$url</a></font></p>";
+   }
+   $handle = fopen($url, "rb");
+   $doc = stream_get_contents($handle);
+   return json_decode($doc);
+}
 
 include_once('tp-comment.php');
 include_once('tp-entry.php');
+include_once('tp-favorite.php');
 
 ?>

@@ -3,6 +3,19 @@
         <title>Rousseau</title>
         <?php 
             include_once('tp-libraries/tp-utilities.php'); 
+            
+            
+            $post_xid = '6a00e5539faa3b88330120a7b004e2970b';
+                
+            $page_number = 1;
+            if ( ($_SERVER['REQUEST_METHOD'] == 'GET') &&
+                ( $_GET['page'] != '')) {
+                    $page_number = $_GET['page'];
+            }
+            
+        
+            $entry_listing = new EntryListing($page_number);
+            $entries = $entry_listing->entries();
         ?>
         
         
@@ -17,23 +30,18 @@
         <div class="entries">
         
         <?php
-            $post_xid = '6a00e5539faa3b88330120a7b004e2970b';
-                
-            $page_number = 1;
-            if ( ($_SERVER['REQUEST_METHOD'] == 'GET') &&
-                ( $_GET['page'] != '')) {
-                    $page_number = $_GET['page'];
-            }
             
-        
-            $entry_listing = new EntryListing($page_number);
-            $entries = $entry_listing->entries();
             
             echo "<ul>";
             foreach ($entries as $entry) {
                 echo "<li>";
-                echo "<h3>". 
-                    "<a href='" . $entry->permalink . "'>" . $entry->title . "</a></h3>";
+                echo "<h3>";
+                
+                // typepad permalink
+                //echo "<a href='" . $entry->permalink . "'>";
+                echo '<a href="entry.php?xid=' . $entry->xid . '">';
+                echo $entry->title . "</a> [".
+                     $entry->xid . "]</h3>";
                 
                 if ($entry->thumbnail) {
                     echo '<img src="' . $entry->thumbnail . '" />';

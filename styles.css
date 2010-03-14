@@ -1,5 +1,6 @@
 body {
    font-family: "Helvetica Neue",Arial,Verdana;
+   font-size: 10pt;
 }
 
 .entries img {
@@ -27,3 +28,57 @@ a.next {
 a.prev {
    float: left;
 }
+
+.comments {
+   width: 400px;
+   border:1px solid #ccc;
+}
+
+.comment-outer {
+/*   width: 400px; */
+}
+.comment-avatar {
+   float: left;
+   padding: 2px 2px;
+   height: 40px;
+}
+.comment-contents {
+   padding: 2px 2px;
+   overflow: auto;
+   
+}
+
+.favorites {
+   width: 400px;
+   border:1px solid #ccc;
+   float: right;
+}
+
+.favorite-avatar {
+   padding: 2pt 2pt;
+}
+
+.entry-body {
+   width: 600px;
+   float: center;
+   font-size: 10pt;
+   border:1px solid #ccc;
+   
+}
+
+#alpha {
+   display: inline;
+   float: left;
+}
+
+#beta {
+   margin: 0px 0px 0px 10px;
+   display: inline;
+   float: left;
+   
+}
+
+#outer {
+   width: 600px;
+}
+
