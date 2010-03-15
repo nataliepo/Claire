@@ -11,7 +11,7 @@ class FavoriteListing {
       $i = 0;    
 
        foreach($events->{'entries'} as $favorite) {
-           $this->favorite_array[$i] = new Favorite($favorite);
+           $this->favorite_array[$i] = new Favorite($favorite->urlId, $favorite);
            $i++;
        }
       return;
@@ -24,26 +24,36 @@ class FavoriteListing {
       $this->build_favorite_listing($post_xid);
    }    
    
+   function size() {
+      if (!$this->favorite_array) {
+         return 0;
+      }
+      
+      return sizeof($this->favorite_array);
+   }
+   
    function favorites() {
-       return $this->favorite_array;
+      if ($this->size() == 0) {
+         return array();
+      }
+      
+      return $this->favorite_array;
    }
 } 
      
      
      
 class Favorite {
-   var $author_avatar;
-   var $author_display_name;
-   var $author_profile_page_url;
-   var $entry_xid;
+   var $author;
+   var $xid;
 
    // contructor
-   function Favorite($favorite_json) {
-       $this->author_avatar = get_resized_avatar($favorite_json->author, 35);
-       $this->author_display_name = $favorite_json->author->displayName;
-       $this->author_profile_page_url = $favorite_json->author->profilePageUrl;
-       $this->entry_xid = $favorite_json->urlId;
-//       $this->author_profile_page_url = $comment_json->author->profilePageUrl;
-//       $this->content = $comment_json->content;
+   function Favorite($xid, $favorite_json = '') {
+      if ($favorite_json == '') {
+         $favorite_json = pull_json(get_favorite_api_url($xid));
+      }
+      
+      $this->author = new Author($favorite_json->author->urlId, $favorite_json->author);
+      $this->xid = $favorite_json->urlId;
    }
 }

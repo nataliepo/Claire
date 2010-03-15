@@ -47,8 +47,11 @@ class Entry {
     var $thumbnail;
     var $xid;
     
+    var $author;
+    
     var $comment_listing;
     var $favorite_listing;
+    var $fb_comment_listing;
     
     // contructor
     //  TWO INPUT TYPES: a JSON entry object, or an XID.
@@ -65,7 +68,10 @@ class Entry {
        $this->permalink = $entry_json->permalinkUrl;
        $this->thumbnail = get_first_thumbnail($entry_json->embeddedImageLinks);
        $this->xid = $entry_json->urlId;
+       $this->author = new Author($entry_json->author->urlId, $entry_json->author);
+
     }
+    
       
     function title () {
         return $this->title;
@@ -87,6 +93,10 @@ class Entry {
        $this->favorite_listing = new FavoriteListing($this->xid);
     }
     
+    function build_fb_comment_listing() {
+       $this->fb_comment_listing = new FBCommentListing($this->xid);
+    }
+    
     function comments() {
       if (!$this->comment_listing) {
          $this->build_comment_listing();
@@ -101,6 +111,13 @@ class Entry {
        }
        
        return $this->favorite_listing->favorites();
+    }
+    
+    function fb_comments() {
+       if (!$this->fb_comment_listing) {
+          $this->build_fb_comment_listing();
+       }
+       return $this->fb_comment_listing->comments();
     }
 }
     

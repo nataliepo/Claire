@@ -14,6 +14,7 @@
             $entry = new Entry($post_xid);
             $comments = $entry->comments();   
             $favorites = $entry->favorites();
+            $fb_comments = $entry->fb_comments();
          ?>
          <title>Rousseau: <?php echo $entry->title; ?></title>
          
@@ -25,8 +26,12 @@
     <body>
         <h2><a href="index.php">Rousseau Demo</a></h2>
         
-        <h3><?php echo $entry->title; ?></h3>
-        
+        <?php
+            echo '<a class="next" href="' . $entry->permalink . '" target="_blank">View Entry on TypePad</a>';
+            echo '<h3><a href="' . $entry->author->profile_url . '"><img class="avatar" src="'. $entry->author->avatar . '" /></a>';
+            echo  $entry->title . "</h3>";
+        ?>
+              
       <div id="alpha">
          <div class="entry-body">
             <p><?php echo $entry->body; ?></p>
@@ -42,7 +47,7 @@
             foreach ($favorites as $favorite) {
                echo
 '<div class="favorite-avatar">
-   <a href="' . $favorite->author_profile_page_url . '"><img src="' . $favorite->author_avatar . '" /></a>
+   <a href="' . $favorite->author->profile_url . '"><img class="avatar" src="' . $favorite->author->avatar . '" /></a>
 </div>';
             }
         ?> 
@@ -52,12 +57,12 @@
         <div class="comments">
            <h5>Comments</h5>
         <?php
-            foreach ($entry->comments() as $comment) {
+            foreach ($comments as $comment) {
             
                 echo 
 '<div class="comment-outer">
     <div class="comment-avatar">
-        <a href="' . $comment->author_profile_page_url . '"<img src="' . $comment->author_avatar. '" /></a>
+        <a href="' . $comment->author->profile_url . '"><img class="avatar" src="' . $comment->author->avatar. '" /></a>
     </div>
     <div class="comment-contents">
         <p>' . 
@@ -68,6 +73,25 @@
             }
         ?>
         </div>
+        
+        <div class="comments">
+         <h5>Facebook Comments</h5>
+        <?php
+            foreach ($fb_comments as $comment) {
+
+                echo 
+'<div class="comment-outer">
+    <div class="comment-avatar">
+        <a href="' . $comment->author->profile_url . '"><img class="avatar" src="' . $comment->author->avatar. '" /></a>
+    </div>
+    <div class="comment-contents">
+        <p>' . 
+            $comment->content . 
+        '</p>
+    </div>
+</div>';
+            }
+        ?>         
         
         
       </div> 

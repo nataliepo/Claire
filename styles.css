@@ -82,3 +82,13 @@ a.prev {
    width: 600px;
 }
 
+.avatar {
+   max-height: 55px;
+   max-width: 55px;
+   border: 0pt;
+   padding: 2pt 2pt;
+}
+
+.debug {
+   color: red;
+}

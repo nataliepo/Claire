@@ -93,6 +93,29 @@ function get_favorites_api_url ($xid) {
      return ROOT_TYPEPAD_API_URL . '/assets/' . $xid . '/favorites.json';
 }
 
+function get_author_api_url ($xid) {
+   return ROOT_TYPEPAD_API_URL . '/users/' . $xid . '.json';
+}
+
+function get_comment_api_url ($xid) {  
+   /*
+    * this is an unverified api call -- 
+    * constructing it from other models and info on 
+    * http://www.typepad.com/services/apidocs/objecttypes/Comment
+    */
+//   return ROOT_TYPEPAD_API_URL . '/comment/' . $xid . '.json';
+}
+
+function get_favorite_api_url ($xid) {
+   /*
+    * this is an unverified api call -- 
+    * constructing it from other models and info on 
+    * http://www.typepad.com/services/apidocs/objecttypes/Favorite
+    */
+  //  return ROOT_TYPEPAD_API_URL . '/comment/' . $xid . '.json';
+    
+}
+
 /** 
  *   input: 
  *    $URL -- a full string to scrape the json data from
@@ -102,15 +125,24 @@ function get_favorites_api_url ($xid) {
 function pull_json ($url) { 
    
    if ($GLOBALS['debug_mode']) {
-      echo "<p class='debug'><font color='red'>[PULL_JSON], URL = <a href='$url'>$url</a></font></p>";
+      echo "<p class='debug'>[PULL_JSON], URL = <a href='$url'>$url</a></p>";
    }
    $handle = fopen($url, "rb");
    $doc = stream_get_contents($handle);
    return json_decode($doc);
 }
 
+function debug ($msg) {
+   if (DEFAULT_DEBUG_MODE) {
+      echo '<p class="debug">' . $msg . '</p>';
+   }
+}
+
 include_once('tp-comment.php');
 include_once('tp-entry.php');
 include_once('tp-favorite.php');
+include_once('tp-author.php');
+include_once ('fb-std-libraries/includes/facebook.php');
+
 
 ?>
