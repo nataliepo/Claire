@@ -30,6 +30,7 @@
             echo '<a class="next" href="' . $entry->permalink . '" target="_blank">View Entry on TypePad</a>';
             echo '<h3><a href="' . $entry->author->profile_url . '"><img class="avatar" src="'. $entry->author->avatar . '" /></a>';
             echo  $entry->title . "</h3>";
+            echo '<p>Posted at ' . $entry->timestamp . '</p>';
         ?>
               
       <div id="alpha">
@@ -47,7 +48,11 @@
             foreach ($favorites as $favorite) {
                echo
 '<div class="favorite-avatar">
-   <a href="' . $favorite->author->profile_url . '"><img class="avatar" src="' . $favorite->author->avatar . '" /></a>
+   <a href="' . $favorite->author->profile_url . '">
+      <img class="avatar" src="' . $favorite->author->avatar . '" />
+   </a>
+   <a href="' . $favorite->author->profile_url . '">' . $favorite->author->display_name .
+      '</a> favorited this entry on ' . $favorite->timestamp . '.
 </div>';
             }
         ?> 
@@ -65,9 +70,10 @@
         <a href="' . $comment->author->profile_url . '"><img class="avatar" src="' . $comment->author->avatar. '" /></a>
     </div>
     <div class="comment-contents">
-        <p>' . 
+        <a href="' . $comment->author->profile_url . '">' . $comment->author->display_name . '</a>
+        wrote <p>' . 
             $comment->content . 
-        '</p>
+        '</p> on ' . $comment->timestamp . '<br />
     </div>
 </div>';
             }
@@ -81,14 +87,15 @@
 
                 echo 
 '<div class="comment-outer">
-    <div class="comment-avatar">
-        <a href="' . $comment->author->profile_url . '"><img class="avatar" src="' . $comment->author->avatar. '" /></a>
+   <div class="comment-avatar">
+      <a href="' . $comment->author->profile_url . '"><img class="avatar" src="' . $comment->author->avatar. '" /></a>
     </div>
     <div class="comment-contents">
-        <p>' . 
-            $comment->content . 
-        '</p>
-    </div>
+      <a href="' . $comment->author->profile_url . '">' . $comment->author->display_name . '</a>
+      wrote <p>' . 
+        $comment->content . 
+        '</p> on ' . $comment->timestamp . '<br />
+   </div>
 </div>';
             }
         ?>         

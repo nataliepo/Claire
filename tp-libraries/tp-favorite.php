@@ -46,6 +46,7 @@ class FavoriteListing {
 class Favorite {
    var $author;
    var $xid;
+   var $timestamp;
 
    // contructor
    function Favorite($xid, $favorite_json = '') {
@@ -55,5 +56,8 @@ class Favorite {
       
       $this->author = new Author($favorite_json->author->urlId, $favorite_json->author);
       $this->xid = $favorite_json->urlId;
+      
+      $date =  new DateTime($favorite_json->published);
+      $this->timestamp = print_timestamp($date);
    }
 }

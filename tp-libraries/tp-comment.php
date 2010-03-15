@@ -58,6 +58,7 @@ class Comment {
     var $author;
     var $content;
     var $xid;
+    var $timestamp;
     
     // contructor
     //  TWO INPUT TYPES: a JSON entry object, or an XID.
@@ -78,6 +79,9 @@ class Comment {
         $this->author = new Author($comment_json->author->urlId, $comment_json->author);
         $this->content = $comment_json->content;
         $this->xid = $comment_json->urlId;
+        
+        $date =  new DateTime($comment_json->published);
+        $this->timestamp = print_timestamp($date);
     }
       
     function get_content () {
@@ -102,6 +106,7 @@ class FBCommentListing {
          return;
       }
       
+      
       for ($i = 0; $i < sizeof($comments); $i++) {
          $fb_comment = new Comment();
          $user_record = $facebook->api_client->users_getInfo($comments[$i]['fromid'], 
@@ -115,6 +120,9 @@ class FBCommentListing {
          // create the comment.
          $fb_comment->author = $fb_author;
          $fb_comment->content = $comments[$i]['text'];
+//         $date = new DateTime->from_epoch($comments[$i]['time']); 
+ //        debug ("[FBCommenter]: " . print_timestamp($date));
+         $fb_comment->timestamp = $comments[$i]['time'];
          $fb_comment->xid = 0;
          
          $this->comment_array[] = $fb_comment;

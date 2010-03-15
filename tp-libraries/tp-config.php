@@ -9,7 +9,11 @@
     define ("FACEBOOK_API_SECRET", "b97215368c83caedaeab91922d407f51");
     
 
-    define ("DEFAULT_DEBUG_MODE", 0);
+    define ("DEFAULT_DEBUG_MODE", 1);
+    
+    
+    // required to use DateTime objects in php
+    date_default_timezone_set('America/New_York');
 ?>
 
 

@@ -138,11 +138,21 @@ function debug ($msg) {
    }
 }
 
+function print_timestamp ($time) {
+   return $time->format('F d, Y H:i');
+}
+
+
+/*****************************
+ * REQUIRED INCLUDES
+ *****************************/
 include_once('tp-comment.php');
 include_once('tp-entry.php');
 include_once('tp-favorite.php');
 include_once('tp-author.php');
-include_once ('fb-std-libraries/includes/facebook.php');
+include_once('tp-date.php');
 
+// Required for Facebook Commenting.
+include_once ('fb-std-libraries/includes/facebook.php');
 
 ?>

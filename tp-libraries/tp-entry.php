@@ -46,6 +46,7 @@ class Entry {
     var $permalink;
     var $thumbnail;
     var $xid;
+    var $timestamp;
     
     var $author;
     
@@ -70,6 +71,8 @@ class Entry {
        $this->xid = $entry_json->urlId;
        $this->author = new Author($entry_json->author->urlId, $entry_json->author);
 
+       $date =  new DateTime($entry_json->published);
+       $this->timestamp = print_timestamp($date);
     }
     
       
@@ -119,6 +122,7 @@ class Entry {
        }
        return $this->fb_comment_listing->comments();
     }
+
 }
     
 ?>
