@@ -138,8 +138,13 @@ function debug ($msg) {
    }
 }
 
-function print_timestamp ($time) {
-   return $time->format('F d, Y H:i');
+function print_timestamp ($datetime) {
+   return $datetime->format('F d, Y g:ia');
+}
+
+function print_timestamp_from_epoch ($time) {
+   return date("F d, Y g:ia", $time);
+   
 }
 
 
@@ -150,7 +155,6 @@ include_once('tp-comment.php');
 include_once('tp-entry.php');
 include_once('tp-favorite.php');
 include_once('tp-author.php');
-include_once('tp-date.php');
 
 // Required for Facebook Commenting.
 include_once ('fb-std-libraries/includes/facebook.php');

@@ -2,42 +2,42 @@
     include_once('tp-utilities.php');
     
 
-    class EntryListing {
-        var $entry_array; 
-          
-          function build_entries_listing ($page_number) {
-             $events = pull_json(get_entries_api_url($page_number));
+class EntryListing {
+     var $entry_array; 
+       
+       function build_entries_listing ($page_number) {
+          $events = pull_json(get_entries_api_url($page_number));
 
-             $i = 0;    
-             foreach($events->{'entries'} as $entry) {
-                 $this->entry_array[$i] = new Entry($entry->urlId, $entry);
-                 $i++;
-             }
+          $i = 0;    
+          foreach($events->{'entries'} as $entry) {
+              $this->entry_array[$i] = new Entry($entry->urlId, $entry);
+              $i++;
+          }
+      }
+
+
+     // contructor
+     function EntryListing($page_number = 1) {
+         $this->entry_listing = array();
+         $this->build_entries_listing($page_number);
+     }
+     
+     function get_post_xid() {
+         return $this->post_xid;
+     }
+     
+     function comment($index) {
+         if ($this->comment_array[$index]) {
+             return $this->comment_array[$index];
          }
-  
-
-        // contructor
-        function EntryListing($page_number = 1) {
-            $this->entry_listing = array();
-            $this->build_entries_listing($page_number);
-        }
-        
-        function get_post_xid() {
-            return $this->post_xid;
-        }
-        
-        function comment($index) {
-            if ($this->comment_array[$index]) {
-                return $this->comment_array[$index];
-            }
-            return "";
-        }
-        
-        function entries() {
-            return $this->entry_array;
-        }
-    }
-    
+         return "";
+     }
+     
+     function entries() {
+         return $this->entry_array;
+     }
+ }
+ 
 
 
 class Entry {
@@ -53,6 +53,7 @@ class Entry {
     var $comment_listing;
     var $favorite_listing;
     var $fb_comment_listing;
+    var $braided_listing;
     
     // contructor
     //  TWO INPUT TYPES: a JSON entry object, or an XID.
@@ -98,6 +99,18 @@ class Entry {
     
     function build_fb_comment_listing() {
        $this->fb_comment_listing = new FBCommentListing($this->xid);
+    }
+    
+    function build_braided_listing() {
+       $this->braided_listing = new BraidedCommentListing($this->xid);
+    }
+    
+    
+    function braided_comments() {
+       if (!$this->braided_listing) {
+          $this->build_braided_listing();
+       }
+       return $this->braided_listing->comments();
     }
     
     function comments() {

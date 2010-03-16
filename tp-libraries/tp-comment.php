@@ -2,54 +2,54 @@
     include_once('tp-utilities.php');
     
 
-    class CommentListing {
-        var $post_xid;
-        var $comment_array;
+ class CommentListing {
+     var $post_xid;
+     var $comment_array;
 
-         function build_comment_listing ($xid) {
-             $events = pull_json(get_comments_api_url($xid));
+      function build_comment_listing ($xid) {
+          $events = pull_json(get_comments_api_url($xid));
 
-             $i = 0;    
-             foreach($events->{'entries'} as $comment) {
-                 $this->comment_array[$i] = new Comment($comment->urlId, $comment);
-                 $i++;
-             }
+          $i = 0;    
+          foreach($events->{'entries'} as $comment) {
+              $this->comment_array[$i] = new Comment($comment->urlId, $comment);
+              $i++;
+          }
+      }
+      
+     // contructor
+     function CommentListing($post_xid = "") {
+         $this->post_xid = $post_xid;
+         $this->comment_listing = array();
+         $this->build_comment_listing($post_xid);
+     }
+     
+     function get_post_xid() {
+         return $this->post_xid;
+     }
+     
+     function comment($index) {
+         if ($this->comment_array[$index]) {
+             return $this->comment_array[$index];
          }
-         
-        // contructor
-        function CommentListing($post_xid = "") {
-            $this->post_xid = $post_xid;
-            $this->comment_listing = array();
-            $this->build_comment_listing($post_xid);
+         return "";
+     }
+     
+     function size() {
+        if (!$this->comment_array) {
+           return 0;
         }
-        
-        function get_post_xid() {
-            return $this->post_xid;
-        }
-        
-        function comment($index) {
-            if ($this->comment_array[$index]) {
-                return $this->comment_array[$index];
-            }
-            return "";
-        }
-        
-        function size() {
-           if (!$this->comment_array) {
-              return 0;
-           }
 
-           return sizeof($this->comment_array);
+        return sizeof($this->comment_array);
+     }
+     
+     function comments() {
+        if ($this->size() == 0) {
+           return array();
         }
-        
-        function comments() {
-           if ($this->size() == 0) {
-              return array();
-           }
 
-           return $this->comment_array;
-        }
-    }
+        return $this->comment_array;
+     }
+ }
     
 
 
@@ -80,7 +80,7 @@ class Comment {
         $this->content = $comment_json->content;
         $this->xid = $comment_json->urlId;
         
-        $date =  new DateTime($comment_json->published);
+        $date =  new DateTime($comment_json->published);        
         $this->timestamp = print_timestamp($date);
     }
       
@@ -120,9 +120,8 @@ class FBCommentListing {
          // create the comment.
          $fb_comment->author = $fb_author;
          $fb_comment->content = $comments[$i]['text'];
-//         $date = new DateTime->from_epoch($comments[$i]['time']); 
- //        debug ("[FBCommenter]: " . print_timestamp($date));
-         $fb_comment->timestamp = $comments[$i]['time'];
+ 
+         $fb_comment->timestamp = print_timestamp_from_epoch($comments[$i]['time']);
          $fb_comment->xid = 0;
          
          $this->comment_array[] = $fb_comment;
@@ -143,6 +142,7 @@ class FBCommentListing {
       
       return sizeof($this->comment_array);
    }
+   
    function comments() {
       if ($this->size() == 0) {
          return array();
@@ -150,7 +150,54 @@ class FBCommentListing {
       
       return $this->comment_array;
    }
-}    
+}
+
+class BraidedCommentListing {
+   var $post_xid;
+   var $comment_array;
+ 
+   function BraidedCommentListing($post_xid = "") {
+      $this->post_xid = $post_xid;
+
+		// Get the TP comments.
+		$tp_comment_listing = new CommentListing($post_xid);
+		$tp_comments = $tp_comment_listing->comments();
+		$fb_comment_listing = new FBCommentListing($post_xid); 
+		$fb_comments = $fb_comment_listing->comments();
+		
+		// Now, construct a hash based on their timestamps.
+		$this->comment_array = array();
+		foreach ($tp_comments as $tp_comment) {
+		   $this->comment_array[$tp_comment->timestamp] = $tp_comment;
+		}
+		foreach ($fb_comments as $fb_comment) {
+		   $this->comment_array[$fb_comment->timestamp] = $fb_comment;
+		}
+		
+		// Sort by the timestamps.
+      // This is sorted REVERSE chronologically -- newest comments first.
+      krsort($this->comment_array);
+      
+      // This is sorted chronologically -- oldest comments first.
+      // ksort($this->comment_array);
+   }
+   
+   function size () {
+      if (!$this->comment_array) {
+         return 0;
+      }
+      
+      return sizeof($this->comment_array);
+   }
+   
+   function comments() {
+      if ($this->size() == 0) {
+           return array();
+        }
+
+        return $this->comment_array;
+   }
+}   
 ?>
 
 
