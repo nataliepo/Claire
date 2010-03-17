@@ -19,8 +19,8 @@
             $comments = $entry->comments();   
             $fb_comments = $entry->fb_comments();
             */
-            
          ?>
+         
          <title>Rousseau: <?php echo $entry->title; ?></title>
          
 

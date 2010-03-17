@@ -97,6 +97,10 @@ function get_author_api_url ($xid) {
    return ROOT_TYPEPAD_API_URL . '/users/' . $xid . '.json';
 }
 
+function get_tpconnect_external_assets_api_url($xid) {
+   return ROOT_TYPEPAD_API_URL . '/blogs/' . $xid . '/discover-external-post-asset.json';
+}
+
 function get_comment_api_url ($xid) {  
    /*
     * this is an unverified api call -- 
@@ -125,11 +129,30 @@ function get_favorite_api_url ($xid) {
 function pull_json ($url) { 
    
    if ($GLOBALS['debug_mode']) {
-      echo "<p class='debug'>[PULL_JSON], URL = <a href='$url'>$url</a></p>";
+      echo "<p class='request'>[PULL_JSON], URL = <a href='$url'>$url</a></p>";
    }
    $handle = fopen($url, "rb");
    $doc = stream_get_contents($handle);
    return json_decode($doc);
+}
+
+
+function post_json ($url, $params) {
+   if ($GLOBALS['debug_mode']) {
+      echo "<p class='request'>[POST_JSON], URL = <a href='$url'>$url</a></p>";
+   }
+
+   $ch = curl_init($url);
+   curl_setopt($ch, CURLOPT_POST, 1);
+   curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+   curl_setopt($ch, CURLOPT_HEADER, 0);
+   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+   curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+          "Content-Type: application/json;"));
+
+   return json_decode(curl_exec($ch));
 }
 
 function debug ($msg) {
@@ -143,8 +166,7 @@ function print_timestamp ($datetime) {
 }
 
 function print_timestamp_from_epoch ($time) {
-   return date("F d, Y g:ia", $time);
-   
+   return date("F d, Y g:ia", $time); 
 }
 
 

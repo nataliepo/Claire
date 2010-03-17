@@ -39,6 +39,66 @@ class EntryListing {
  }
  
 
+class TPConnectEntry {
+   var $xid;
+   var $entry_id;
+   var $tp_comment_listing;
+   var $fb_comment_listing;
+   var $braided_listing;
+   
+   
+   function TPConnectEntry ($blog_xid, $permalink, $entry_id) {
+      $this->entry_id = $entry_id;
+
+      $json = '{"permalinkUrl":"' . $permalink . '"}';
+      $post_url = get_tpconnect_external_assets_api_url($blog_xid);
+      # First, get the 
+      $events = post_json($post_url, $json);
+//      var_dump($events);
+      $this->xid = $events->asset->urlId;
+      
+      $this->tp_comment_listing = array();
+   }
+   
+   function comments() {
+      if (!$this->tp_comment_listing) {
+         $this->build_tp_comment_listing();
+      }
+       
+       return $this->tp_comment_listing->comments();
+    }
+    
+    function build_tp_comment_listing () {
+        $this->tp_comment_listing = new CommentListing($this->xid);
+    }
+
+    function build_fb_comment_listing() {
+        $this->fb_comment_listing = new FBCommentListing($this->entry_id);
+    }
+
+    function build_braided_listing() {
+       $this->braided_listing = new BraidedCommentListing($this->fb_comment_listing->comments(), 
+                                                          $this->tp_comment_listing->comments());
+    }    
+    
+   
+   function braided_comments() {
+       if (!$this->braided_listing) {
+          
+          if (!$this->fb_comment_listing) {
+             $this->build_fb_comment_listing();
+          }
+          
+          if (!$this->tp_comment_listing) {
+             $this->build_tp_comment_listing();
+          }
+          
+          $this->build_braided_listing();
+       }
+       return $this->braided_listing->comments();
+    }
+
+}
 
 class Entry {
     var $title;
@@ -102,12 +162,22 @@ class Entry {
     }
     
     function build_braided_listing() {
-       $this->braided_listing = new BraidedCommentListing($this->xid);
+       $this->braided_listing = new BraidedCommentListing($this->fb_comment_listing->comments(), 
+                                                          $this->comment_listing->comments());
     }
     
     
     function braided_comments() {
        if (!$this->braided_listing) {
+          
+          if (!$this->fb_comment_listing) {
+             $this->build_fb_comment_listing();
+          }
+          
+          if (!$this->comment_listing) {
+             $this->build_comment_listing();
+          }
+          
           $this->build_braided_listing();
        }
        return $this->braided_listing->comments();

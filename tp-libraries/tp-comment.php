@@ -90,6 +90,8 @@ class Comment {
 }
     
     
+
+
 class FBCommentListing {
    var $post_xid;
    var $comment_array; 
@@ -98,8 +100,6 @@ class FBCommentListing {
       $facebook = new Facebook(FACEBOOK_API_KEY, FACEBOOK_API_SECRET);
 
       $comments = $facebook->api_client->comments_get(FACEBOOK_POST_ID_PREFIX . $xid);
-      
-      //debug("[FBCommentListing::build_comment_listing] FB comments_get() response = " . var_dump($comments));
       
       if (!$comments) {
          $this->size = 0;
@@ -153,41 +153,32 @@ class FBCommentListing {
 }
 
 class BraidedCommentListing {
-   var $post_xid;
-   var $comment_array;
+   var $fb_comments;
+   var $tp_comments;
+   
+   var $braided_comments;
  
-   function BraidedCommentListing($post_xid = "") {
-      $this->post_xid = $post_xid;
+   function BraidedCommentListing($tp_comments, $fb_comments) {
 
 		// Get the TP comments.
-		$tp_comment_listing = new CommentListing($post_xid);
+/*		$tp_comment_listing = new CommentListing($post_xid);
 		$tp_comments = $tp_comment_listing->comments();
 		$fb_comment_listing = new FBCommentListing($post_xid); 
 		$fb_comments = $fb_comment_listing->comments();
-		
-		// Now, construct a hash based on their timestamps.
-		$this->comment_array = array();
-		foreach ($tp_comments as $tp_comment) {
-		   $this->comment_array[$tp_comment->timestamp] = $tp_comment;
-		}
-		foreach ($fb_comments as $fb_comment) {
-		   $this->comment_array[$fb_comment->timestamp] = $fb_comment;
-		}
-		
-		// Sort by the timestamps.
-      // This is sorted REVERSE chronologically -- newest comments first.
-      krsort($this->comment_array);
+*/		
+      $this->fb_comments = $fb_comments;
+      $this->tp_comments = $tp_comments;
       
-      // This is sorted chronologically -- oldest comments first.
-      // ksort($this->comment_array);
+		// Now, construct a hash based on their timestamps.
+		$this->braided_comments = braid_comments($tp_comments, $fb_comments);
    }
    
    function size () {
-      if (!$this->comment_array) {
+      if (!$this->braided_comments) {
          return 0;
       }
       
-      return sizeof($this->comment_array);
+      return sizeof($this->braided_comments);
    }
    
    function comments() {
@@ -195,8 +186,36 @@ class BraidedCommentListing {
            return array();
         }
 
-        return $this->comment_array;
+        return $this->braided_comments;
    }
+}
+
+/* 
+ * Utility method to sort up to 3 arrays based on Comment->timestamp.
+ */
+function braid_comments ($list1, $list2, $list3='') {
+   
+   if ($list3 == '') {
+      $list3 = array();
+   }
+   
+   $merged_array = array_merge($list1, $list2, $list3);
+   $final_array = array();   
+   
+   foreach ($merged_array as $comment) {
+      $final_array[$comment->timestamp] = $comment;
+   }
+   
+
+   // Sort by the timestamps.
+   // This is sorted REVERSE chronologically -- newest comments first.
+   krsort($final_array);
+      
+   // This is sorted chronologically -- oldest comments first.
+   // ksort($this->comment_array);
+   
+   return $final_array;
+   
 }   
 ?>
 

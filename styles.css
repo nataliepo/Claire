@@ -92,3 +92,7 @@ a.prev {
 .debug {
    color: red;
 }
+
+.request {
+   color: #FF00CC;
+}
