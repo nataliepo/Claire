@@ -13,14 +13,13 @@
     define ("FACEBOOK_API_KEY", "ee8e855f33bdb1f255dad718eaf65342");
     define ("FACEBOOK_API_SECRET", "b97215368c83caedaeab91922d407f51");
 */
+
 // FOR MT TESTING
 
     define ("FACEBOOK_POST_ID_PREFIX", "fb-animals-");
     define ("FACEBOOK_API_KEY", "336fb869587da7159dc0c56337183c3d");
     define ("FACEBOOK_API_SECRET", "d3db6494609e56aec9bf3392f69aff40");
 
-
-    
 
     define ("DEFAULT_DEBUG_MODE", 1);
     

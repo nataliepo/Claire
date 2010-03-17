@@ -9,27 +9,27 @@ The tp-libraries/tp-config.php file has a section that says "FOR HOBBITTED" and 
 
 ## To see FB Comments + TypePad Blog Comments (Hobbitted Demo)
 * Replace:
-   // FOR HOBBITTED
-   /*
-       define ("FACEBOOK_POST_ID_PREFIX", "braided_comments-");
-       ...
-   */
-   // FOR MT TESTING
-   
-       define ("FACEBOOK_POST_ID_PREFIX", "fb-animals-");
-       ...
-   
+      // FOR HOBBITTED
+      /*
+         define ("FACEBOOK_POST_ID_PREFIX", "braided_comments-");
+         ...
+      */
+      // FOR MT TESTING
+      
+         define ("FACEBOOK_POST_ID_PREFIX", "fb-animals-");
+         ...
+      
 with
-   // FOR HOBBITTED
-   
-       define ("FACEBOOK_POST_ID_PREFIX", "braided_comments-");
-       ...
-   
-   // FOR MT TESTING
-   /*
-       define ("FACEBOOK_POST_ID_PREFIX", "fb-animals-");
-       ...
-   */
+      // FOR HOBBITTED
+      
+         define ("FACEBOOK_POST_ID_PREFIX", "braided_comments-");
+         ...
+      
+      // FOR MT TESTING
+      /*
+         define ("FACEBOOK_POST_ID_PREFIX", "fb-animals-");
+         ...
+      */
 which essentially comments out the MT Testing FB app connectivity info.
 
 Then, view the index of that folder in your browser.  You'll see a simple comment listing from my Hobbitted "Plotzed" blog post.  Pick an entry.  I suggest the "Some ill sh*t is overdue..." post, since it has FB and TP comments.  Look in the Comments listing for avatars with the little Facebook icon in the corner -- that comment listing is Braided.
