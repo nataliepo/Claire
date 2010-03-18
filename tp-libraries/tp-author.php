@@ -5,7 +5,6 @@ class Author {
     var $avatar;
     var $xid;
     
-    
     function Author($xid = 0, $author_json = '') {
 
        // Allow creationg of empty Author to allow
@@ -23,6 +22,5 @@ class Author {
        $this->avatar = get_resized_avatar($author_json, 35);
     }
 }
-    
     
 ?>

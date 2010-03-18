@@ -14,11 +14,6 @@
             $entry = new Entry($post_xid);
             $favorites = $entry->favorites();
             $braided_comments = $entry->braided_comments();
-            
-            /*
-            $comments = $entry->comments();   
-            $fb_comments = $entry->fb_comments();
-            */
          ?>
          
          <title>Rousseau: <?php echo $entry->title; ?></title>
@@ -51,14 +46,14 @@
           
        <?php 
             foreach ($favorites as $favorite) {
-               echo
-'<div class="favorite-avatar">
-   <a href="' . $favorite->author->profile_url . '">
-      <img class="avatar" src="' . $favorite->author->avatar . '" />
-   </a>
-   <a href="' . $favorite->author->profile_url . '">' . $favorite->author->display_name .
-      '</a> favorited this entry on ' . $favorite->timestamp . '.
-</div>';
+               echo '
+            <div class="favorite-avatar">
+               <a href="' . $favorite->author->profile_url . '">
+                  <img class="avatar" src="' . $favorite->author->avatar . '" />
+               </a>
+               <a href="' . $favorite->author->profile_url . '">' . $favorite->author->display_name .
+               '</a> favorited this entry on ' . $favorite->timestamp . '.
+            </div>';
             }
         ?> 
            
@@ -70,18 +65,16 @@
               <?php
 
                  foreach ($braided_comments as $comment) {
-                                 echo 
-                 '<div class="comment-outer">
-                     <div class="comment-avatar">
-                         <a href="' . $comment->author->profile_url . '"><img class="avatar" src="' . $comment->author->avatar. '" /></a>
-                     </div>
-                     <div class="comment-contents">
-                         <a href="' . $comment->author->profile_url . '">' . $comment->author->display_name . '</a>
-                         wrote <p>' . 
-                             $comment->content . 
-                         '</p> on ' . $comment->timestamp . '<br />
-                     </div>
-                 </div>';                  
+                    echo '
+            <div class="comment-outer">
+               <div class="comment-avatar">
+                  <a href="' . $comment->author->profile_url . '"><img class="avatar" src="' . $comment->author->avatar. '" /></a>
+               </div>
+               <div class="comment-contents">
+                  <a href="' . $comment->author->profile_url . '">' . $comment->author->display_name . '</a>
+                  wrote <p>' . $comment->content . '</p> on ' . $comment->timestamp . '<br />
+               </div>
+            </div>';                  
                  }
               ?>
         </div>
