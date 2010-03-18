@@ -36,7 +36,10 @@
           $this->content = $comment_json->content;
           $this->xid = $comment_json->urlId;
 
-          //   $date =  new DateTime($comment_json->published);        
+/*          $datetime =  new DateTime($comment_json->published);
+          debug ("Timestamp would have been: " . $datetime->format('F d, Y g:ia'));
+*/
+         // FOR PHP 5.1.6 COMPATIBILITY.
           $this->timestamp = new TPDate($comment_json->published);
        }
 
@@ -127,6 +130,7 @@ class FBCommentListing {
          $fb_comment->content = $comments[$i]['text'];
  
 //         $fb_comment->timestamp = print_timestamp_from_epoch($comments[$i]['time']);
+         // FOR PHP 5.1.6 COMPATIBILITY.
          $fb_comment->timestamp = new TPDate($comments[$i]['time']);
 
          $fb_comment->xid = 0;

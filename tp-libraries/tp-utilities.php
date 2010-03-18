@@ -162,18 +162,7 @@ function debug ($msg) {
 }
 
 function print_tp_timestamp ($datetime) {
-//   return $datetime->format('F d, Y g:ia');
-
-   // EXAMPLE:
-   //  2010-03-16T18:58:20Z
-   $pattern = '/^([\d]{4})-([\d]{2})-([\d]{2})/';
-   
-   preg_match($pattern, $datetime, $matches);
-   debug ("matches: " . print_r($matches));
-   
-
-   return $datetime;
-   
+   return $datetime->format('F d, Y g:ia');
 }
 
 function print_timestamp_from_epoch ($time) {

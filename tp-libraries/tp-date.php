@@ -36,7 +36,8 @@ class TPDate {
        $this->year   = $matches[1];
        $this->month  = $matches[2];
        $this->day    = $matches[3];
-       $this->hour   = $matches[4];
+       // force east coast time zone right now.
+       $this->hour   = $matches[4] - 5;
        $this->min    = $matches[5];
        $this->sec    = $matches[6];
     }
@@ -46,10 +47,10 @@ class TPDate {
        $this->year   =  date("Y", $timestring);
        $this->month  =  date("m", $timestring);
        $this->day    =  date("d", $timestring);
-       $this->hour   =  date("g", $timestring);
+       $this->hour   =  date("H", $timestring);
        $this->min    =  date("i", $timestring);
        $this->sec    =  date("s", $timestring);
-       $this->ampm   =  date("a", $timestring);       
+            
     }
 
 
