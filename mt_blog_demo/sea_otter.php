@@ -8,13 +8,12 @@
    include_once('config.php');
    
    $tp_entry = new TPConnectEntry('6a00e5539faa3b88330120a94362b9970b', 
-                                  'http://mtcs-demo.apperceptive.com/testmt/animals/2010/03/sloth.html',
-                                  '61');
+                                  'http://mtcs-demo.apperceptive.com/testmt/animals/2010/03/sea-otter.php',
+                                  '60');
 
    $comments = $tp_entry->braided_comments();
 
 ?>
-
    
 </head>
 
@@ -37,8 +36,8 @@
             <a href="' . $comment->author->profile_url . '"><img class="avatar" src="' . $comment->author->avatar. '" /></a>
          </div>
          <div class="comment-contents">
-            <a href="' . $comment->author->profile_url . '">' . $comment->author->display_name . '</a> wrote <p>' . 
-               $comment->content . '</p> on ' . $comment->time() . '<br />
+            <a href="' . $comment->author->profile_url . '">' . $comment->author->display_name . '</a> wrote <p>' . $comment->content . '</p> on ' . 
+                  $comment->time() . '<br />
          </div>
       </div>';                  
          }

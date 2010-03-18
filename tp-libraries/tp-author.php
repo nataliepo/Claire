@@ -13,7 +13,7 @@ class Author {
           return;
        }
 
-       if ($author_json == '') {
+       if (!$author_json) {
           $author_json = pull_json(get_author_api_url($xid));
        }
        

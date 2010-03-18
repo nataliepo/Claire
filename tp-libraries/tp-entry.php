@@ -15,7 +15,6 @@ class EntryListing {
           }
       }
 
-
      // contructor
      function EntryListing($page_number = 1) {
          $this->entry_listing = array();
@@ -69,7 +68,7 @@ class TPConnectEntry {
     }
     
     function build_tp_comment_listing () {
-        $this->tp_comment_listing = new CommentListing($this->xid);
+        $this->tp_comment_listing = new TPCommentListing($this->xid);
     }
 
     function build_fb_comment_listing() {
@@ -150,7 +149,7 @@ class Entry {
     }
     
     function build_comment_listing () {
-       $this->comment_listing = new CommentListing($this->xid);
+       $this->comment_listing = new TPCommentListing($this->xid);
     }
     
     function build_favorite_listing() {

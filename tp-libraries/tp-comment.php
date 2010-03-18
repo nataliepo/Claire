@@ -1,7 +1,55 @@
 <?php
     include_once('tp-utilities.php');
     
-class CommentListing {
+    
+    /**********
+     * Comment objects are agnostic of platform.  They can be
+     * TypePad, FB, or another type of comment, but they always have:
+     *    $author, which is an Author object (defined in tp-author.php)
+     *    $content, which is just a string that represents the comment.
+     *    $xid is the TP Entry's XID if this is a TP Comment.
+     *    $timestamp is the date/time of the comment's posting
+     ***************************/
+    class Comment {
+       var $author;
+       var $content;
+       var $xid;
+       var $timestamp;
+
+       // contructor
+       //  TWO INPUT TYPES: a JSON entry object, or an XID.
+       // passing a JSON object reduces the number of requests.
+       // passing an XID makes another request to get lots of information.
+       function Comment($xid = 0, $comment_json = '') {
+
+          // Allow creation of a Comment shell to allow other Commenting Services
+          // to take on its form.
+          if (!$xid) {
+             return;
+          }
+
+          if (!$comment_json) {
+             $comment_json = pull_json(get_entry_api_url($xid));
+          }
+
+          $this->author = new Author($comment_json->author->urlId, $comment_json->author);
+          $this->content = $comment_json->content;
+          $this->xid = $comment_json->urlId;
+
+          //   $date =  new DateTime($comment_json->published);        
+          $this->timestamp = new TPDate($comment_json->published);
+       }
+
+       function get_content () {
+          return $this->content;
+       }  
+       
+       function time() {
+          return $this->timestamp->print_readable_time();
+       }
+    }
+
+class TPCommentListing {
    var $post_xid;
    var $comment_array;
 
@@ -16,7 +64,7 @@ class CommentListing {
    }
       
    // contructor
-   function CommentListing($post_xid = "") {
+   function TPCommentListing($post_xid = "") {
       $this->post_xid = $post_xid;
       $this->comment_listing = array();
       $this->build_comment_listing($post_xid);
@@ -49,42 +97,6 @@ class CommentListing {
       return $this->comment_array;
    }
 }
-    
-
-class Comment {
-   var $author;
-   var $content;
-   var $xid;
-   var $timestamp;
-    
-   // contructor
-   //  TWO INPUT TYPES: a JSON entry object, or an XID.
-   // passing a JSON object reduces the number of requests.
-   // passing an XID makes another request to get lots of information.
-   function Comment($xid = 0, $comment_json = '') {
-       
-      // Allow creation of a Comment shell to allow other Commenting Services
-      // to take on its form.
-      if (!$xid) {
-         return;
-      }
-       
-      if ($comment_json == '') {
-         $comment_json = pull_json(get_entry_api_url($xid));
-      }
-       
-      $this->author = new Author($comment_json->author->urlId, $comment_json->author);
-      $this->content = $comment_json->content;
-      $this->xid = $comment_json->urlId;
-        
-      $date =  new DateTime($comment_json->published);        
-      $this->timestamp = print_timestamp($date);
-   }
-
-   function get_content () {
-      return $this->content;
-   }  
-}
 
 
 class FBCommentListing {
@@ -114,7 +126,9 @@ class FBCommentListing {
          $fb_comment->author = $fb_author;
          $fb_comment->content = $comments[$i]['text'];
  
-         $fb_comment->timestamp = print_timestamp_from_epoch($comments[$i]['time']);
+//         $fb_comment->timestamp = print_timestamp_from_epoch($comments[$i]['time']);
+         $fb_comment->timestamp = new TPDate($comments[$i]['time']);
+
          $fb_comment->xid = 0;
          
          $this->comment_array[] = $fb_comment;
@@ -187,7 +201,7 @@ function braid_comments ($list1, $list2, $list3='') {
    $final_array = array();   
    
    foreach ($merged_array as $comment) {
-      $final_array[$comment->timestamp] = $comment;
+      $final_array[$comment->timestamp->print_sortable_time()] = $comment;
    }
 
    // Sort by the timestamps.
