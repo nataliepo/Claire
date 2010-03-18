@@ -2,7 +2,7 @@
     <head>
         <title>Rousseau</title>
         <?php 
-            include_once('tp-libraries/tp-utilities.php'); 
+            include_once('config.php'); 
             
             
             $post_xid = '6a00e5539faa3b88330120a7b004e2970b';
@@ -19,7 +19,7 @@
         ?>
         
         
-           <link rel="stylesheet" href="styles.css" type="text/css" />
+           <link rel="stylesheet" href="tp-libraries/styles.css" type="text/css" />
     </head>
         
     <body>
@@ -30,27 +30,23 @@
         <div class="entries">
         
         <?php
-            
-            
-            echo "<ul>";
+                        
             foreach ($entries as $entry) {
-                echo "<li>";
                 echo "<h3>";
                 
                 // typepad permalink
                 //echo "<a href='" . $entry->permalink . "'>";
                 echo '<a href="entry.php?xid=' . $entry->xid . '">';
-                echo $entry->title . "</a> [".
-                     $entry->xid . "]</h3>";
+                echo $entry->title . "</a></h3>";
                 
                 if ($entry->thumbnail) {
                     echo '<img src="' . $entry->thumbnail . '" />';
                 }
-                echo $entry->excerpt() . "<br />";
+                echo $entry->excerpt();
+                echo  "<br /><br /><br />";
             
-                echo "</li>";
             }
-            echo "</ul>";
+            echo "<br />";
 
         ?>
         </div>

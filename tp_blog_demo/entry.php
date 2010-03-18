@@ -1,7 +1,7 @@
 <html>
     <head>
         <?php 
-            include_once('tp-libraries/tp-utilities.php'); 
+            include_once('config.php');
      
             // provide a post_xid just in case.
             $post_xid = '6a00e5539faa3b88330120a7b004e2970b';
@@ -24,7 +24,7 @@
          <title>Rousseau: <?php echo $entry->title; ?></title>
          
 
-     <link rel="stylesheet" href="styles.css" type="text/css" />
+     <link rel="stylesheet" href="tp-libraries/styles.css" type="text/css" />
 
     </head>
         

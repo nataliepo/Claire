@@ -96,3 +96,7 @@ a.prev {
 .request {
    color: #FF00CC;
 }
+
+ul {
+   list-style-type: none;
+}

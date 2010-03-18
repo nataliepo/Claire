@@ -2,10 +2,11 @@
 <head>
    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
    <title>ajax_test</title>
-   <link rel="stylesheet" href="styles.css" type="text/css" />
+   <link rel="stylesheet" href="tp-libraries/styles.css" type="text/css" />
    
 <?php
-   include_once('tp-libraries/tp-utilities.php'); 
+//   include_once('tp-libraries/tp-utilities.php'); 
+   include_once('config.php');
    
    $tp_entry = new TPConnectEntry('6a00e5539faa3b88330120a94362b9970b', 
                                   'http://mtcs-demo.apperceptive.com/testmt/animals/2010/03/sloth.html',
