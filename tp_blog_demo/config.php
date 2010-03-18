@@ -7,6 +7,6 @@
 
     define ("DEFAULT_DEBUG_MODE", 0);
 
-    include_once('tp-libraries/tp-utilities.php'); 
+    include_once('../tp-libraries/tp-utilities.php'); 
 
 ?>
