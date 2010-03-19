@@ -57,7 +57,14 @@ class Favorite {
       $this->author = new Author($favorite_json->author->urlId, $favorite_json->author);
       $this->xid = $favorite_json->urlId;
       
-      $date =  new DateTime($favorite_json->published);
+/*     $date =  new DateTime($favorite_json->published);
       $this->timestamp = print_timestamp($date);
+*/
+      // FOR PHP 5.1.6 COMPATIBILITY.
+      $this->timestamp = new TPDate($favorite_json->published);
+   }
+   
+   function time() {
+      return $this->timestamp->print_readable_time();
    }
 }

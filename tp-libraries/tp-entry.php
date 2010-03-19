@@ -131,8 +131,11 @@ class Entry {
        $this->xid = $entry_json->urlId;
        $this->author = new Author($entry_json->author->urlId, $entry_json->author);
 
-       $date =  new DateTime($entry_json->published);
-       $this->timestamp = print_timestamp($date);
+       // GETTING RID OF DateTime for PHP 5.1.6 compatibility
+//       $date =  new DateTime($entry_json->published);
+//       $this->timestamp = print_timestamp($date);
+      $this->timestamp = new TPDate($entry_json->published);
+
     }
     
       
@@ -203,6 +206,10 @@ class Entry {
           $this->build_fb_comment_listing();
        }
        return $this->fb_comment_listing->comments();
+    }
+
+    function time() {
+        return $this->timestamp->print_readable_time();
     }
 
 }

@@ -30,7 +30,7 @@
             echo '<a class="next" href="' . $entry->permalink . '" target="_blank">View Entry on TypePad</a>';
             echo '<h3><a href="' . $entry->author->profile_url . '"><img class="avatar" src="'. $entry->author->avatar . '" /></a>';
             echo  $entry->title . "</h3>";
-            echo '<p>Posted at ' . $entry->timestamp . '</p>';
+            echo '<p>Posted at ' . $entry->time() . '</p>';
         ?>
               
       <div id="alpha">
@@ -52,7 +52,7 @@
                   <img class="avatar" src="' . $favorite->author->avatar . '" />
                </a>
                <a href="' . $favorite->author->profile_url . '">' . $favorite->author->display_name .
-               '</a> favorited this entry on ' . $favorite->timestamp . '.
+               '</a> favorited this entry on ' . $favorite->time() . '.
             </div>';
             }
         ?> 
@@ -72,7 +72,7 @@
                </div>
                <div class="comment-contents">
                   <a href="' . $comment->author->profile_url . '">' . $comment->author->display_name . '</a>
-                  wrote <p>' . $comment->content . '</p> on ' . $comment->timestamp . '<br />
+                  wrote <p>' . $comment->content . '</p> on ' . $comment->time() . '<br />
                </div>
             </div>';                  
                  }
