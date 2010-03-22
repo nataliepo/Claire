@@ -2,14 +2,14 @@
 
 <head>
 
-   <title>Rousseau - Demos</title>
+   <title>Claire - Demos</title>
    <link rel="stylesheet" href="tp-libraries/styles.css" type="text/css" />
 
 </head>
 
 <body>
 
-<h2>Rousseau Demos</h2>
+<h2>Claire Demos</h2>
 
 <p>These are simple demos of Braided Comments that connect with custom FB apps.</p>
 
