@@ -1,7 +1,7 @@
 <html>
 
 <head>
-   <title>Rousseau</title>
+   <title>Claire</title>
    <?php 
       include_once('config.php'); 
             
@@ -21,7 +21,7 @@
    <link rel="stylesheet" href="tp-libraries/styles.css" type="text/css" />
 </head>
 <body>
-   <h2><a href="index.php">Rousseau Demo</a></h2>     
+   <h2><a href="index.php">Claire Demo</a></h2>     
    <h4>Here are the recent posts for the blog <a href="http://nataliepo.typepad.com/hobbitted/">Hobbitted</a>.</h4> 
    <div class="entries">  
    <?php

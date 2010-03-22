@@ -16,7 +16,7 @@
             $braided_comments = $entry->braided_comments();
          ?>
          
-         <title>Rousseau: <?php echo $entry->title; ?></title>
+         <title>Claire: <?php echo $entry->title; ?></title>
          
 
      <link rel="stylesheet" href="tp-libraries/styles.css" type="text/css" />
@@ -24,7 +24,7 @@
     </head>
         
     <body>
-        <h2><a href="index.php">Rousseau Demo</a></h2>
+        <h2><a href="index.php">Claire Demo</a></h2>
         
         <?php
             echo '<a class="next" href="' . $entry->permalink . '" target="_blank">View Entry on TypePad</a>';
