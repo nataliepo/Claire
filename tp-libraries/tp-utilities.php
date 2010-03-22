@@ -136,7 +136,22 @@ function pull_json ($url) {
    return json_decode($doc);
 }
 
-
+function post_text ($url, $params) {
+   debug ("[POST_TEXT], URL+PARAMS = <a href='$url?$params'>$url?$params</a>");
+   
+   $ch = curl_init ($url);
+   curl_setopt($ch, CURLOPT_POST, 1);
+   curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+   curl_setopt($ch, CURLOPT_HEADER, 0);
+   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+      
+   $result = curl_exec($ch);
+   var_dump($result);
+   debug ("[post_text] RESULT ^^");
+   
+   
+}
 function post_json ($url, $params) {
    if ($GLOBALS['debug_mode']) {
       echo "<p class='request'>[POST_JSON], URL = <a href='$url'>$url</a></p>";

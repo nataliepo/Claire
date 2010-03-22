@@ -35,7 +35,7 @@ class EntryListing {
      function entries() {
          return $this->entry_array;
      }
- }
+}
  
 
 class TPConnectEntry {
