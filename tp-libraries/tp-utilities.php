@@ -147,10 +147,7 @@ function post_text ($url, $params) {
    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
       
    $result = curl_exec($ch);
-   var_dump($result);
-   debug ("[post_text] RESULT ^^");
-   
-   
+   return json_decode($result);
 }
 function post_json ($url, $params) {
    if ($GLOBALS['debug_mode']) {
