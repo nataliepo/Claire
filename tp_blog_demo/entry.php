@@ -13,13 +13,14 @@
             
             $entry = new Entry($post_xid);
             $favorites = $entry->favorites();
-            $braided_comments = $entry->braided_comments();
+//            $braided_comments = $entry->braided_comments();
+            $braided_comments = $entry->comments();
          ?>
          
          <title>Claire: <?php echo $entry->title; ?></title>
          
 
-     <link rel="stylesheet" href="tp-libraries/styles.css" type="text/css" />
+     <link rel="stylesheet" href="../tp-libraries/styles.css" type="text/css" />
 
     </head>
         

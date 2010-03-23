@@ -7,7 +7,6 @@
 <?php
    include_once('config.php');
    
-   $comments = post_text ('http://dev3.apperceptive.com/rousseau/comments.php','url=http://nataliepo.typepad.com/nataliepo/2010/03/mindy-kaling-and-her-twitter-machine.html');
 ?>
 
    <link rel="stylesheet" href="../tp-libraries/styles.css" type="text/css" />
@@ -26,6 +25,7 @@
          <li><a href="justin_bieber.php">Justin Bieber</a></li>
          <li><a href="mindy_kaling.php">Mindy Kaling</a></li>
          <li><a href="nmcm_gaga_dogs.php">Not Modcult Material: Dogs Dressed as Lady Gaga</a></li>
+         <li><a href="daria.php">Best Show Credits Ever: Daria</a></li>
       </ul>
    </div>
    

@@ -126,14 +126,19 @@ function get_favorite_api_url ($xid) {
  *  output: 
  *    a json-decoded php object.
 **/
-function pull_json ($url) { 
+function pull_json ($url, $decode=1) { 
    
    if ($GLOBALS['debug_mode']) {
       echo "<p class='request'>[PULL_JSON], URL = <a href='$url'>$url</a></p>";
    }
    $handle = fopen($url, "rb");
    $doc = stream_get_contents($handle);
-   return json_decode($doc);
+   if ($decode) {
+      return json_decode($doc);
+   }
+   else {
+      return $doc;
+   }
 }
 
 function post_text ($url, $params) {
@@ -145,10 +150,15 @@ function post_text ($url, $params) {
    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
    curl_setopt($ch, CURLOPT_HEADER, 0);
    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+   
+/*   curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+          "Content-Type: application/json;")); */
       
    $result = curl_exec($ch);
+   debug ("[post_text] RESULT = $result");
    return json_decode($result);
 }
+
 function post_json ($url, $params) {
    if ($GLOBALS['debug_mode']) {
       echo "<p class='request'>[POST_JSON], URL = <a href='$url'>$url</a></p>";
@@ -192,6 +202,6 @@ include_once('tp-author.php');
 include_once('tp-date.php');
 
 // Required for Facebook Commenting.
-include_once ('fb-std-libraries/includes/facebook.php');
+/*include_once ('fb-std-libraries/includes/facebook.php'); */
 
 ?>

@@ -18,7 +18,8 @@
    ?>
         
         
-   <link rel="stylesheet" href="tp-libraries/styles.css" type="text/css" />
+   <link rel="stylesheet" href="../tp-libraries/styles.css" type="text/css" />
+
 </head>
 <body>
    <h2><a href="index.php">Claire Demo</a></h2>     

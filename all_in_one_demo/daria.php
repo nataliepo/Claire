@@ -7,11 +7,10 @@
 <?php
    include_once('config.php');
 
-   $url = 'http://nataliepo.typepad.com/nataliepo/2010/03/mindy-kaling-and-her-twitter-machine.html';
-   // optional
-   $content = ''; 
-   $site_url = '';
-   $timestamp = '';
+   $url = 'http://nataliepo.typepad.com/nataliepo/2010/03/best-show-credits-ever-daria.html';
+   $content = '<p>There should be a Daria Appreciation week.&#0160; </p>';
+   $site_url = 'http://nataliepo.typepad.com';
+   $timestamp = '2010-03-23 13:00:25';
    
    $comment_obj = post_text ('http://dev3.apperceptive.com/rousseau/comments.php',
                      "url=$url&content=$content&site_url=$site_url&timestamp=$timestamp");
@@ -26,7 +25,7 @@
 
 <body>
    
-   <a href="index.php"><h2>TypePad Blog Post - FB Comments Only: "Mindy Kaling and her Twitter Machine"</h2></a>
+   <a href="index.php"><h2>TypePad Blog Post - FB Comments Only: "Best Show Credits Ever: Daria"</h2></a>
 
    <a class="next" href="<?php echo $url; ?>" target="_blank">View Entry in TypePad</a> <br />
    <a class="next" href="http://www.facebook.com/pages/Hobbitted/358069609094?v=app_106566566031325&ref=ts" target="_blank">View FaceBook Fan Page Tab</a>

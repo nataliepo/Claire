@@ -2,7 +2,7 @@
 <head>
    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
    <title>Movable Type - TPConnect + FBComments Demo</title>
-   <link rel="stylesheet" href="tp-libraries/styles.css" type="text/css" />
+   <link rel="stylesheet" href="../tp-libraries/styles.css" type="text/css" />
    
 <?php
    include_once('config.php');
@@ -11,7 +11,7 @@
                                   'http://mtcs-demo.apperceptive.com/testmt/animals/2010/03/sea-otter.php',
                                   '60');
 
-   $comments = $tp_entry->braided_comments();
+   $comments = $tp_entry->rousseaus_listing();
 
 ?>
    
@@ -29,7 +29,8 @@
 
       <?php
 
-         foreach ($comments as $comment) {
+         echo $comments;
+       /*  foreach ($comments as $comment) {
             echo '
       <div class="comment-outer">
          <div class="comment-avatar">
@@ -41,6 +42,7 @@
          </div>
       </div>';                  
          }
+         */
       ?>
    </div>
    

@@ -44,6 +44,8 @@ class TPConnectEntry {
    var $tp_comment_listing;
    var $fb_comment_listing;
    var $braided_listing;
+   var $blog_xid;
+   var $permalink;
    
    
    function TPConnectEntry ($blog_xid, $permalink, $entry_id) {
@@ -57,6 +59,8 @@ class TPConnectEntry {
       $this->xid = $events->asset->urlId;
       
       $this->tp_comment_listing = array();
+      $this->blog_xid = $blog_xid;
+      $this->permalink = $permalink;
    }
    
    function comments() {
@@ -72,26 +76,42 @@ class TPConnectEntry {
     }
 
     function build_fb_comment_listing() {
-        $this->fb_comment_listing = new FBCommentListing($this->entry_id);
+//       $comments = new FBCommentListing($comment_obj->comments, $comment_obj->xid);
+       
+        $this->fb_comment_listing = new FBCommentListing('', FACEBOOK_POST_ID_PREFIX . $this->entry_id);
     }
 
     function build_braided_listing() {
        $this->braided_listing = new BraidedCommentListing($this->fb_comment_listing->comments(), 
                                                           $this->tp_comment_listing->comments());
+   }
+   
+   function rousseaus_listing() {                                                       
+                                                          
+         // Use the Rousseau server.
+        /*
+         * ?
+         * blog_xid=6a00e5539faa3b88330120a94362b9970b
+         * permalink=http://mtcs-demo.apperceptive.com/testmt/animals/2010/03/sea-otter.php
+         * fb_id=fb-animals-60
+      */
+        $params = "blog_xid=" . $this->blog_xid . "&" . 
+                  "permalink=" . $this->permalink . "&" . 
+                  "fb_id=" . FACEBOOK_POST_ID_PREFIX . $this->entry_id . "&" . 
+                  "HTML=1";
+                  
+         $comment_json = pull_json(ROUSSEAU_COMMENTS_URL . '?' . $params, 0);
+/*
+         var_dump($comment_json);
+         debug ("Rousseau Result: ^");
+*/
+         
+        return $comment_json;
     }    
     
    
    function braided_comments() {
-       if (!$this->braided_listing) {
-          
-          if (!$this->fb_comment_listing) {
-             $this->build_fb_comment_listing();
-          }
-          
-          if (!$this->tp_comment_listing) {
-             $this->build_tp_comment_listing();
-          }
-          
+       if (!$this->braided_listing) {          
           $this->build_braided_listing();
        }
        return $this->braided_listing->comments();
@@ -160,7 +180,7 @@ class Entry {
     }
     
     function build_fb_comment_listing() {
-       $this->fb_comment_listing = new FBCommentListing($this->xid);
+       $this->fb_comment_listing = new FBCommentListing(FACEBOOK_POST_ID_PREFIX . $this->xid);
     }
     
     function build_braided_listing() {
@@ -170,6 +190,7 @@ class Entry {
     
     
     function braided_comments() {
+       
        if (!$this->braided_listing) {
           
           if (!$this->fb_comment_listing) {
@@ -183,6 +204,9 @@ class Entry {
           $this->build_braided_listing();
        }
        return $this->braided_listing->comments();
+       
+     
+       
     }
     
     function comments() {
