@@ -141,8 +141,8 @@ function pull_json ($url, $decode=1) {
    }
 }
 
-function post_text ($url, $params) {
-   debug ("[POST_TEXT], URL+PARAMS = <a href='$url?$params'>$url?$params</a>");
+function post_text ($url, $params, $decode=1) {
+   debug ("[POST_TEXT], URL = $url ");
    
    $ch = curl_init ($url);
    curl_setopt($ch, CURLOPT_POST, 1);
@@ -155,8 +155,12 @@ function post_text ($url, $params) {
           "Content-Type: application/json;")); */
       
    $result = curl_exec($ch);
-   debug ("[post_text] RESULT = $result");
-   return json_decode($result);
+   if ($decode) {
+      return json_decode($result);
+   }
+   else {
+      return $result;
+   }
 }
 
 function post_json ($url, $params) {

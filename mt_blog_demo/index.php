@@ -11,7 +11,9 @@
                                   'http://mtcs-demo.apperceptive.com/testmt/animals/2010/03/sloth.html',
                                   '61');
 
-   $comments = $tp_entry->braided_comments();
+//   $comments = $tp_entry->braided_comments();
+$comments = $tp_entry->rousseaus_listing();
+
 
 ?>
 
@@ -30,6 +32,8 @@
 
       <?php
 
+         echo $comments;
+         /*
          foreach ($comments as $comment) {
             echo '
       <div class="comment-outer">
@@ -42,6 +46,7 @@
          </div>
       </div>';                  
          }
+         */
       ?>
    </div>
    

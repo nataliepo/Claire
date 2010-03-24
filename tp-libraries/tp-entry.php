@@ -46,9 +46,11 @@ class TPConnectEntry {
    var $braided_listing;
    var $blog_xid;
    var $permalink;
+   var $timestamp;
    
+   var $content;
    
-   function TPConnectEntry ($blog_xid, $permalink, $entry_id) {
+   function TPConnectEntry ($blog_xid, $permalink, $entry_id, $timestamp, $content) {
       $this->entry_id = $entry_id;
 
       $json = '{"permalinkUrl":"' . $permalink . '"}';
@@ -61,6 +63,8 @@ class TPConnectEntry {
       $this->tp_comment_listing = array();
       $this->blog_xid = $blog_xid;
       $this->permalink = $permalink;
+      $this->content = $content;
+      $this->timestamp = $timestamp;
    }
    
    function comments() {
@@ -95,18 +99,15 @@ class TPConnectEntry {
          * permalink=http://mtcs-demo.apperceptive.com/testmt/animals/2010/03/sea-otter.php
          * fb_id=fb-animals-60
       */
+      $escaped_content = urlencode($this->content);
         $params = "blog_xid=" . $this->blog_xid . "&" . 
                   "permalink=" . $this->permalink . "&" . 
                   "fb_id=" . FACEBOOK_POST_ID_PREFIX . $this->entry_id . "&" . 
+                  "content=" . $escaped_content . "&" . 
+                  "timestamp=" . $this->timestamp . "&" .
                   "HTML=1";
-                  
-         $comment_json = pull_json(ROUSSEAU_COMMENTS_URL . '?' . $params, 0);
-/*
-         var_dump($comment_json);
-         debug ("Rousseau Result: ^");
-*/
          
-        return $comment_json;
+        return rousseaus_comments($params);
     }    
     
    
@@ -237,6 +238,15 @@ class Entry {
     }
 
 }
+ 
+ 
+ 
+/*** Makes the Rousseau request. ***/
+function rousseaus_comments ($params) {
+//   return pull_json(ROUSSEAU_COMMENTS_URL . '?' . $params, 0);
+   return post_text(ROUSSEAU_COMMENTS_URL, $params, 0);
+} 
+ 
     
 ?>
 
