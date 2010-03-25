@@ -46,11 +46,10 @@ class TPConnectEntry {
    var $braided_listing;
    var $blog_xid;
    var $permalink;
-   var $timestamp;
    
    var $content;
    
-   function TPConnectEntry ($blog_xid, $permalink, $entry_id, $timestamp, $content) {
+   function TPConnectEntry ($blog_xid, $permalink, $entry_id, $content) {
       $this->entry_id = $entry_id;
 
       $json = '{"permalinkUrl":"' . $permalink . '"}';
@@ -64,7 +63,6 @@ class TPConnectEntry {
       $this->blog_xid = $blog_xid;
       $this->permalink = $permalink;
       $this->content = $content;
-      $this->timestamp = $timestamp;
    }
    
    function comments() {
@@ -104,7 +102,6 @@ class TPConnectEntry {
                   "permalink=" . $this->permalink . "&" . 
                   "fb_id=" . FACEBOOK_POST_ID_PREFIX . $this->entry_id . "&" . 
                   "content=" . $escaped_content . "&" . 
-                  "timestamp=" . $this->timestamp . "&" .
                   "HTML=1";
          
         return rousseaus_comments($params);

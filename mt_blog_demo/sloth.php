@@ -32,7 +32,6 @@
    $tp_entry = new TPConnectEntry('6a00e5539faa3b88330120a94362b9970b', 
                                   'http://mtcs-demo.apperceptive.com/testmt/animals/2010/03/sloth.php',
                                   '61',
-                                  '2010-03-23 13:00:25',
                                   $content);
 /*
 $tp_entry = new TPConnectEntry('6a00e5539faa3b88330120a94362b9970b', 
