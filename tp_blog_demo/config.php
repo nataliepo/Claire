@@ -1,5 +1,6 @@
 <?php
 // FOR HOBBITTED
+   define ("BLOG_XID", "6a00e5539faa3b88330120a7aa0fdb970b");    
 
 
     define ("FACEBOOK_POST_ID_PREFIX", "braided_comments-");

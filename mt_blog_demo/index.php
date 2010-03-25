@@ -16,6 +16,7 @@
    <ol>
       <li><a href="sea_otter.php">Sea Otter</a></li>
       <li><a href="sloth.php">Sloth</a></li>
+      <li><a href="rabbit.php">Rabbit</a></li>
    </ol>
    
 </body>
