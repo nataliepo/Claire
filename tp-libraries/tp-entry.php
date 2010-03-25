@@ -56,7 +56,7 @@ class TPConnectEntry {
       $post_url = get_tpconnect_external_assets_api_url($blog_xid);
       # First, get the 
       $events = post_json($post_url, $json);
-//      var_dump($events);
+
       $this->xid = $events->asset->urlId;
       
       $this->tp_comment_listing = array();
@@ -88,23 +88,17 @@ class TPConnectEntry {
                                                           $this->tp_comment_listing->comments());
    }
    
-   function rousseaus_listing() {                                                       
-                                                          
-         // Use the Rousseau server.
-        /*
-         * ?
-         * blog_xid=6a00e5539faa3b88330120a94362b9970b
-         * permalink=http://mtcs-demo.apperceptive.com/testmt/animals/2010/03/sea-otter.php
-         * fb_id=fb-animals-60
-      */
+   function rousseaus_listing() {                                                                                                           
+      // Use the Rousseau server.
+
       $escaped_content = urlencode($this->content);
-        $params = "blog_xid=" . $this->blog_xid . "&" . 
-                  "permalink=" . $this->permalink . "&" . 
-                  "fb_id=" . FACEBOOK_POST_ID_PREFIX . $this->entry_id . "&" . 
-                  "content=" . $escaped_content . "&" . 
-                  "HTML=1";
+      $params = "blog_xid=" . $this->blog_xid . "&" . 
+               "permalink=" . $this->permalink . "&" . 
+               "fb_id=" . FACEBOOK_POST_ID_PREFIX . $this->entry_id . "&" . 
+               "content=" . $escaped_content . "&" . 
+               "HTML=1";
          
-        return rousseaus_comments($params);
+      return rousseaus_comments($params);
     }    
     
    
@@ -185,6 +179,19 @@ class Entry {
        $this->braided_listing = new BraidedCommentListing($this->fb_comment_listing->comments(), 
                                                           $this->comment_listing->comments());
     }
+    
+    function rousseaus_listing() {                                                                                                           
+       // Use the Rousseau server.
+
+       $escaped_content = urlencode('<h3>'. $this->title . '</h3>');
+       $params = "xid=" . $this->xid . "&" . 
+                "permalink=" . $this->permalink . "&" . 
+                "fb_prefix=" . FACEBOOK_POST_ID_PREFIX . "&" . 
+                "content=" . $escaped_content . "&" . 
+                "HTML=1";
+
+       return rousseaus_comments($params);
+     }
     
     
     function braided_comments() {

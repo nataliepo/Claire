@@ -41,7 +41,7 @@
 
 <body>
    
-   <h2>Movable Type Blog Post (TPConnect Comments + FaceBook Fan Page Comments)</h2>
+   <h2><a href="index.php">Movable Type Blog Post (TPConnect Comments + FaceBook Fan Page Comments)</a></h2>
 
    <a class="next" href="http://mtcs-demo.apperceptive.com/testmt/animals/2010/03/sloth.html" target="_blank">View Entry on Movable Type</a> <br />
    <a class="next" href="http://www.facebook.com/pages/Hobbitted/358069609094?v=app_368383693541&ref=ts" target="_blank">View FaceBook Fan Page Tab</a>
