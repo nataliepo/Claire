@@ -1,0 +1,50 @@
+Before an application can interact with a user's content on TypePad it must obtain an OAuth token and associated secret. The OAuth token and its secret serve as a set of credentials which connect the application with the user's TypePad account, allowing the application to perform operations on TypePad on behalf of that user.
+
+
+>> Visit http://www.typepad.com/account
+>> Click 'Developer' in the sidebar
+>> Click 'API: Apply Here' to apply for new keys
+>> Fill in your app's information.  If you're working locally, use 127.0.0.1 instead of localhost.
+>> Save, then click your App's name. 
+>> Note the Anonymous Access Key, Anonymous Access Secret, Consumer Key and Consumer Secret.  You'll need the Anonymous 2 first.
+
+
+The application must first discover its three OAuth service endpoints by making an anonymous request, as described above, to the /api-keys/<id> endpoint, using its API key (which serves as its OAuth consumer key) as the id. 
+
+>> Test that your Consumer Key works here:
+   http://api.typepad.com/api-keys/<consumer_key>.json
+   
+>> Then, make a GET Request in your code to request the TypePad OAuth endpoints.
+$url = 'http://api.typepad.com/api-keys/' . $options['consumer_key'] . '.json';
+$handle = fopen($url, "rb");
+$doc = json_decode(stream_get_contents($handle));
+
+
+In the response is a property named "owner" which contains an Application object which contains the properties oauthRequestTokenUrl,
+
+   # rel = oauth-request-token-endpoint
+   # href = https://www.typepad.com/secure/services/oauth/request_token
+
+oauthAuthorizationUrl 
+   # rel = oauth-authorization-page
+   # href = https://www.typepad.com/secure/services/api/6p0133ec3d788a970b/oauth-approve
+
+and oauthAccessTokenUrl.
+   # rel = oauth-access-token-endpoint
+   # href = https://www.typepad.com/secure/services/oauth/access_token
+
+
+*** MAKE THE DB TABLES USING
+   oauth-php/library/store/mysql/mysql.sql as a guide.
+   And watch out for unprintable characters in that file. (annoying.)
+
+*** natalie left off here: http://code.google.com/p/oauth-php/wiki/ConsumerHowTo#OAuth_Consumer
+
+Using these URLs the application must perform a standard OAuth transaction as described in the OAuth 1.0a specification. The OAuth specification has full details, but in summary:
+
+    * Make a request to oauthRequestTokenUrl, signed with the application's OAuth consumer key, to obtain a temporary request token and secret.
+    * Issue a redirect to the user's browser to take them to oauthAuthoriationUrl, with the query string parameter oauth_token giving the temporary request token obtained in the previous step.
+    * Once the user has approved your application, recieve a redirect to a callback URL within your application acknowleging that the request was approved.
+    * Make a request to oauthAccessTokenUrl, signed with the application's consumer key and the temporary request token, to obtain an authorized OAuth access token and secret which can be used to make authenticated requests as described in the next section. 
+
+Libraries are available for most popular programming languages which implement the OAuth protocol, and developers are advised to make use of these libraries where possible.
