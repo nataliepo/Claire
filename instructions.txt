@@ -1,0 +1,67 @@
+TO SERVE FACEBOOK COMMENTS ONLY
+-----------------------------------
+
+1. Make a page that contains the following information:
+
+
+   // be sure to urlencode() your $content.
+   $content = "<h3>This is some fabulous content.</h3>";
+   $encoded_content = encodeurl($content);
+   $permalink = "http://my.site.com/this_url";
+   $fb_id = "my_site_1234";
+   $html  = 1;  // a flag to indicate I want an HTML comment response instead of JSON
+   
+   $params = "content=$encoded_content" . "&" . 
+             "permalink=$permalink" . "&" . 
+             "fb_id=$fb_id" . "&"
+             "html=$html";  // (optional)
+   
+
+2. Natalie will add this URL to the ones that can post to facebook.
+
+   _ Make sure the entry was posted
+         select posts_id, posts_permalink, posts_fb_id from posts;
+
+   _ Insert a sites row based on that URL
+         insert into sites (sites_url) values (<domain of URL>);
+
+   _ Recycle the FB API key for the existing Rousseau FB App:
+         update sites set sites_fb_api_key='feb21f78c79d85b2d0c715dd1e12f947' where sites_id=
+         update sites set sites_fb_secret='5b5a2bf5c965e757557e8e797c89c933' where sites_id=
+
+   _ Update the FB App's Profile link to key off of this site_Id.
+         http://www.facebook.com/developers/#!/developers/apps.php?app_id=106566566031325
+         Edit Settings
+         Profiles
+         Change URL parameter to key on the sites_id.
+         View Tab: http://www.facebook.com/pages/Hobbitted/358069609094?v=app_106566566031325&ref=ts   
+         Display should say: "There aren't any posts yet."
+   
+   
+   
+3. On your page, make a POST request like this:
+
+   define ("ROUSSEAU_COMMENTS_URL", "http://dev3.apperceptive.com/rousseau/comments.php");
+   
+   $ch = curl_init (ROUSSEAU_COMMENTS_URL);
+   curl_setopt($ch, CURLOPT_POST, 1);
+   curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+   curl_setopt($ch, CURLOPT_HEADER, 0);
+   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+   $comments = curl_exec($ch);
+   
+And echo your $comments variable somewhere in your page's body.
+   <body>
+      <p>Content = <?php echo $content; ?></p>
+      <p>Comments = <?php echo $comments; ?></p>
+   </body>
+   
+
+4. View the FB page.  Post a comment on your new post.
+
+5. Refresh your local client page.  You should see your FB Comment!
+
+
+
