@@ -1,3 +1,20 @@
+TO SERVE FB + TYPEPAD COMMENTS
+--------------------------------
+1. Make a page that contains the following information:
+
+
+   $content = "<h3>This is a local page serving Facebook AND TypePad comments.</h3>";
+   $encoded_content = urlencode($content);
+   $permalink = "http://localhost/just_tp_and_facebook/index.php";
+   $fb_prefix = "nataliepo_";
+   $xid = '6a00e5539faa3b88330120a970f9cb970b';
+   $html = 1;
+
+   $params = "content=$encoded_content&permalink=$permalink&xid=$xid&fb_prefix=$fb_prefix&HTML=$html";
+
+Now start at step 2 of the next section.
+
+
 TO SERVE FACEBOOK COMMENTS ONLY
 -----------------------------------
 
@@ -17,10 +34,7 @@ TO SERVE FACEBOOK COMMENTS ONLY
              "html=$html";  // (optional)
    
 
-2. Natalie will add this URL to the ones that can post to facebook.
-
-   _ Make sure the entry was posted
-         select posts_id, posts_permalink, posts_fb_id from posts;
+2. Natalie will add this URL to the ones that can post to Facebook.
 
    _ Insert a sites row based on that URL
          insert into sites (sites_url) values (<domain of URL>);
