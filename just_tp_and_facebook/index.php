@@ -17,8 +17,8 @@
             // i'll submit these vars to rousseau.  
             $content = "<h3>This is a local page serving Facebook AND TypePad comments.</h3>";
             $encoded_content = urlencode($content);
-            $permalink = "http://localhost/just_tp_and_facebook/index.php";
-            $fb_prefix = "nataliepo_";
+            $permalink = "http://tp_and_facebook.com/just_tp_and_facebook/index.php";
+            $fb_prefix = "tp_and_fb_";
             $xid = '6a00e5539faa3b88330120a970f9cb970b';
             $html = 1;
             
@@ -47,10 +47,9 @@
         <h2><a href="index.php">Claire Demo</a></h2>
         
         <?php
-         //   echo '<a class="next" href="' . $entry->permalink . '" target="_blank">View Entry on TypePad</a>';
-         //   echo '<h3><a href="' . $entry->author->profile_url . '"><img class="avatar" src="'. $entry->author->avatar . '" /></a>';
-         //   echo  $entry->title . "</h3>";
-         //   echo '<p>Posted at ' . $entry->time() . '</p>';
+         echo '<a class="next" href="http://nataliepo.typepad.com/nataliepo/2010/03/ada-lovelace-and-lady-coders.html" target="_blank">View Entry on TypePad</a>';
+         echo '<br />';
+         echo '<a class="next" href="http://www.facebook.com/pages/Hobbitted/358069609094?v=app_106566566031325&ref=ts">View the Facebook App</a>';
         ?>
               
       <div id="alpha">

@@ -77,5 +77,3 @@ And echo your $comments variable somewhere in your page's body.
 
 5. Refresh your local client page.  You should see your FB Comment!
 
-
-

@@ -26,6 +26,15 @@
 <p>The 'Sloth' entry in Movable Type is <a href="http://mtcs-demo.apperceptive.com/testmt/animals/2010/03/sloth.html">available here</a> and it uses TypePad Connect for commenting.  A FaceBook app called "Braided-Beta" on the <a href="http://www.facebook.com/pages/Hobbitted/358069609094?v=app_368383693541&ref=ts">Hobbitted Fan Page's Braided-Beta tab</a> shows an index of that blog and enables FB users to post comments on every thread.  There is one comment that FaceBook tab, and there are currently 2 comments on the MT-published entry.</p>
 
 <p>The <a href="mt_blog_demo/">demo page</a> in this example shows the braided comment list, which would ideally be folded into the MT templates so all comments would reside with the content source.</p>
+<br />
+
+<h3><a href="just_facebook">Facebook standalone page</a></h3>
+<p>This is a one-pager showing how to serve Facebook comments.</p>
+<br />
+
+<h3><a href="just_tp_and_facebook">TypePad and Facebook standalone page</a></h3>
+<p>This is a one-pager showing how to serve TypePad and FB comments without using the supporting Claire libraries.</p>
+
 
 
 </body>

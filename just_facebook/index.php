@@ -15,10 +15,10 @@
             define ("ROUSSEAU_COMMENTS_URL", "http://dev3.apperceptive.com/rousseau/comments.php");
             
             // i'll submit these vars to rousseau.  
-            $content = "<h3>This is just a local page serving Facebook comments.</h3>";
+            $content = "<h3>Hooray for Friday!  This is a FB-Comments-Only post.</h3>";
             $encoded_content = urlencode($content);
-            $permalink = "http://localhost/claire/just_facebook/index.php";
-            $fb_id = "claire_1";
+            $permalink = "http://my.site.com/stuff";
+            $fb_id = "my_site_1";
             $html = 1;
             
             $params = "content=$encoded_content&permalink=$permalink&fb_id=$fb_id&HTML=$html";
