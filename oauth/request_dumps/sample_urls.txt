@@ -51,6 +51,15 @@ https://api.typepad.com/users/@self.js ?
    oauth_token=HtZyoSzjfEzZPZZD
 
    
+https://api.typepad.com/users/@self.js ? 
+   oauth_timestamp=1269886384 & 
+   oauth_nonce=1673098414 & 
+   oauth_consumer_key=c5139cef2985b86d & 
+   oauth_version=1.0 &
+   oauth_signature_method=PLAINTEXT &
+   oauth_signature=K0J0Im71%266QOKZ3rmqSTaNPUI &
+   oauth_token=QMMkbWeHrqtpAieW   
+   
    
 *** PLACK ***
 https://www.typepad.com/secure/services/oauth/request_token ?

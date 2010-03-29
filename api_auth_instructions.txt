@@ -83,4 +83,11 @@ Once an application has obtained
 it may use these as credentials to make authenticated requests on behalf of that user. Authenticated requests are made via an encrypted channel to https://api.typepad.com/. Anonymous requests are not allowed to the SSL endpoints. 
 
 The OAuth credentials must be provided via a WWW-Authenticate HTTP request header whose scheme is OAuth, as described in the OAuth 1.0a specification, section 7. Using the WWW-Authenticate header is required for all endpoints except those few which specifically permit using the query string. 
+
 ? OK, API endpoints are using WWW-Authenticate, but how to call them?
+
+
+** USEFUL READABLE PHP OAUTH CODE: https://svn.iamcal.com/public/php/lib_oauth/lib_oauth.php
+** downside -- GET only requests for setting up connection, but is that ok?
+
+* Good article about WWW-Authentication: http://www.voidspace.org.uk/python/articles/authentication.shtml

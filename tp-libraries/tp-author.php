@@ -17,6 +17,7 @@ class Author {
           $author_json = pull_json(get_author_api_url($xid));
        }
        
+       $this->xid = $author_json->urlId;
        $this->display_name = $author_json->displayName;
        $this->profile_url = $author_json->profilePageUrl;
        $this->avatar = get_resized_avatar($author_json, 35);

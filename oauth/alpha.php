@@ -4,6 +4,8 @@
       include_once ("oauth-php-98/library/OAuthStore.php");
       include_once ("oauth-php-98/library/OAuthRequester.php");
       
+      include_once('config.php'); 
+      
    
       $db_options = array('server' => 'localhost',
                           'username' => 'rocky',
@@ -85,7 +87,8 @@
 		
 		// This creates a generic Request object.
       $oauth 	= new OAuthRequester($uri, $method, $params);
-		$oauth->setParam('oauth_callback', 'http://127.0.0.1/claire/oauth/beta.php');
+//		$oauth->setParam('oauth_callback', 'http://127.0.0.1/claire/oauth/beta.php');
+		$oauth->setParam('oauth_callback', 'http://127.0.0.1/claire/oauth/index.php');
 
       // ..and this adds more parameters, like the timestamp, nonce, version, signature method, etc
       $oauth->sign($user_id, $r);
