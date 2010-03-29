@@ -1,0 +1,7 @@
+[_make_request] -- Request = "$VAR1 = bless( {
+                 '_content' => '',
+                 '_uri' => bless( do{\(my $o = 'https://www.typepad.com/secure/services/oauth/request_token?oauth_signature=n3lQROBcPnBZvEgplUzHcgkUCrA%3D&oauth_timestamp=1269811986&oauth_callback=http%3A%2F%2F127.0.0.1%3A5000%2Flogin-callback&oauth_nonce=853433351&oauth_consumer_key=c5139cef2985b86d&oauth_version=1.0&oauth_signature_method=HMAC-SHA1')}, 'URI::https' ),
+                 '_headers' => bless( {}, 'HTTP::Headers' ),
+                 '_method' => 'GET'
+               }, 'HTTP::Request' );
+"

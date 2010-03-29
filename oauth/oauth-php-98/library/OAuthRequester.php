@@ -62,6 +62,7 @@ class OAuthRequester extends OAuthRequestSigner
 	{
 		parent::__construct($request, $method, $params, $body);
 
+
 		// When there are files, then we can construct a POST with a single file
 		if (!empty($files))
 		{
@@ -155,8 +156,10 @@ class OAuthRequester extends OAuthRequestSigner
 		$uri 	= $r['request_token_uri'];
 
 		$oauth 	= new OAuthRequester($uri, $method, $params);
+
 		$oauth->sign($usr_id, $r);
-		$text	= $oauth->curl_raw();
+		
+      $text = $oauth->curl_raw();
 
 		if (empty($text))
 		{
@@ -293,7 +296,7 @@ class OAuthRequester extends OAuthRequestSigner
 			$header = $opts[CURLOPT_HTTPHEADER];
 		}
 		else
-		{
+		{	
 			$header = array();
 		}
 
@@ -301,6 +304,7 @@ class OAuthRequester extends OAuthRequestSigner
 		$method		= $this->getMethod();
 		$url		= $this->getRequestUrl();
 		$header[]	= $this->getAuthorizationHeader();
+
 		$query		= $this->getQueryString();
 		$body		= $this->getBody();
 
@@ -378,6 +382,7 @@ class OAuthRequester extends OAuthRequestSigner
 			}
 			else
 			{
+			   
 				if (!empty($query))
 				{
 					$url .= '?'.$query;
@@ -401,6 +406,7 @@ class OAuthRequester extends OAuthRequestSigner
 			{
 				curl_setopt($ch, $k, $v);
 			}
+
 		}
 
 		$txt = curl_exec($ch);
@@ -410,7 +416,8 @@ class OAuthRequester extends OAuthRequestSigner
 		{
 			fclose($put_file);
 		}
-
+      
+		
 		// Tell the logger what we requested and what we received back
 		$data = $method . " $url\n".implode("\n",$header);
 		if (is_string($body))

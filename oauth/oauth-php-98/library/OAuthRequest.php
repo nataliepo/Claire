@@ -288,10 +288,15 @@ class OAuthRequest
 		if (isset($this->param['oauth_version']))
 		{
 			$version = $this->urldecode($this->param['oauth_version']);
+
+/*
+* Taking this out since TypePad supports 1.0a
+
 			if ($version != '1.0')
 			{
 				throw new OAuthException2('Expected OAuth version 1.0, got "'.$this->param['oauth_version'].'"');
 			}
+*/
 		}
 	}
 

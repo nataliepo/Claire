@@ -1,0 +1,75 @@
+*** PHP ***
+
+https://www.typepad.com/secure/services/oauth/request_token ? 
+   oauth_signature=q%2FsC5B6%2B2Ju%2F6uQWbRI1MW6H54A%3D &
+   oauth_timestamp=1269813729 &
+   oauth_callback=http%3A%2F%2Flocalhost%2Fclaire%2Foauth%2Fomgitworked.php &
+   oauth_nonce=4bafd1e1e7eb3 &
+   oauth_consumer_key=c5139cef2985b86d &
+   oauth_version=1.0 &
+   oauth_signature_method=HMAC-SHA1
+   
+https://www.typepad.com/secure/services/oauth/request_token   ?
+   oauth_signature=au%2FcyLUjC2ugSJSxg7a5uZkOdRI%3D &
+   oauth_timestamp=1269814606 &
+   oauth_callback=http%3A%2F%2Flocalhost%2Fclaire%2Foauth%2Fomgitworked.php &
+   oauth_nonce=1331497121091565 &
+   oauth_consumer_key=c5139cef2985b86d & 
+   oauth_version=1.0 &
+   oauth_signature_method=
+   
+
+
+https://www.typepad.com/secure/services/oauth/request_token ?
+   oauth_timestamp=1269816639 &
+   oauth_callback=http%3A%2F%2F127.0.0.1%2Fclaire%2Foauth%2Fomgitworked.php & 
+   oauth_nonce=2062515490 & 
+   oauth_consumer_key=c5139cef2985b86d & 
+   oauth_version=1.0 & 
+   oauth_signature_method=HMAC-SHA1 &
+   oauth_signature=XS2cs%2Bw75caBW%2BqjSrDQ%2BR3Gh24%3D
+   
+   
+https://www.typepad.com/secure/services/oauth/access_token ?
+   oauth_signature=K0J0Im71%26OsZP6NbajnsMJcyq &
+   oauth_timestamp=1269829582 &
+   oauth_nonce=2026172102 &
+   oauth_consumer_key=c5139cef2985b86d &
+   oauth_token=eaa4457b96bf7a675d3a5cf52839c9ddf8c3d8519ae37ac06d1b697f8428dff58d57792762c89aab0c88a125637aa5ecb27ffb483833f804b6f977cdcde85852 &
+   oauth_verifier=79282103 
+   oauth_version=1.0 &
+   oauth_signature_method=PLAINTEXT &
+
+
+https://api.typepad.com/users/@self.js ?
+   oauth_timestamp=1269833396 &
+   oauth_nonce=1787615216 &
+   oauth_consumer_key=c5139cef2985b86d &
+   oauth_version=1.0 &
+   oauth_signature_method=PLAINTEXT &
+   oauth_signature=K0J0Im71%26JAQstIBzpZsEdWie &
+   oauth_token=HtZyoSzjfEzZPZZD
+
+   
+   
+*** PLACK ***
+https://www.typepad.com/secure/services/oauth/request_token ?
+   oauth_signature=n3lQROBcPnBZvEgplUzHcgkUCrA%3D &
+   oauth_timestamp=1269811986 &
+   oauth_callback=http%3A%2F%2F127.0.0.1%3A5000%2Flogin-callback &
+   oauth_nonce=853433351 &
+   oauth_consumer_key=c5139cef2985b86d &
+   oauth_version=1.0 &
+   oauth_signature_method=HMAC-SHA1
+   
+   
+   
+https://www.typepad.com/secure/services/oauth/access_token ?
+   oauth_signature=xpTqy0OUNMP3lSYOvLmV3hl22qI%3D &
+   oauth_timestamp=1269826923 &
+   oauth_nonce=3335269224 &
+   oauth_consumer_key=c5139cef2985b86d &
+   oauth_token=eaa4457b96bf7a675d3a5cf52839c9dd87ed71de8e427bc0d659b452d6ce0c15c20a6d948d197261a92c993a2652e1e0aec02548d2c67ab1cc3827ade93b57db &
+   oauth_verifier=66767682 &
+   oauth_version=1.0 &
+   oauth_signature_method=HMAC-SHA1

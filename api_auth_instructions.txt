@@ -1,3 +1,19 @@
+***
+   good instructions from http://github.com/abraham/twitteroauth/blob/master/DOCUMENTATION
+***
+FLOW OVERVIEW
+====================
+1) Build TwitterOAuth object using client credentials.
+2) Request temporary credentials from Twitter.
+3) Build authorize URL for Twitter.
+4) Redirect user to authorize URL.
+5) User authorizes access and returns from Twitter.
+6) Rebuild TwitterOAuth object with client credentials and temporary credentials.
+7) Get token credentials from Twitter.
+8) Rebuild TwitterOAuth object with client credentials and token credentials.
+9) Query Twitter API.
+
+
 Before an application can interact with a user's content on TypePad it must obtain an OAuth token and associated secret. The OAuth token and its secret serve as a set of credentials which connect the application with the user's TypePad account, allowing the application to perform operations on TypePad on behalf of that user.
 
 
@@ -38,13 +54,33 @@ and oauthAccessTokenUrl.
    oauth-php/library/store/mysql/mysql.sql as a guide.
    And watch out for unprintable characters in that file. (annoying.)
 
-*** natalie left off here: http://code.google.com/p/oauth-php/wiki/ConsumerHowTo#OAuth_Consumer
 
 Using these URLs the application must perform a standard OAuth transaction as described in the OAuth 1.0a specification. The OAuth specification has full details, but in summary:
 
-    * Make a request to oauthRequestTokenUrl, signed with the application's OAuth consumer key, to obtain a temporary request token and secret.
-    * Issue a redirect to the user's browser to take them to oauthAuthoriationUrl, with the query string parameter oauth_token giving the temporary request token obtained in the previous step.
-    * Once the user has approved your application, recieve a redirect to a callback URL within your application acknowleging that the request was approved.
-    * Make a request to oauthAccessTokenUrl, signed with the application's consumer key and the temporary request token, to obtain an authorized OAuth access token and secret which can be used to make authenticated requests as described in the next section. 
+X  Make a request to oauthRequestTokenUrl, signed with the application's OAuth consumer key, to obtain a temporary request token and secret.
+    
+--> Signing the request here means providing a 'oauth_signature' parameter, not actually encrypting the request itself.
+    
+X Issue a redirect to the user's browser to take them to oauthAuthoriationUrl, with the query string parameter oauth_token giving the temporary request token obtained in the previous step.
+   $query_params = array();
+    $query_params['oauth_token'] = $response['oauth_token'];
+    // the redirect() method is from the OAuth library
+    OAuthRequest::redirect($endpoint_strs['oauth-authorization-page'], $query_params);
+   
+X Once the user has approved your application, recieve a redirect to a callback URL within your application acknowleging that the request was approved.
+
+
+X Make a request to oauthAccessTokenUrl, signed with the application's consumer key and the temporary request token, to obtain an authorized OAuth access token and secret
+
+.... which can be used to make authenticated requests as described in the next section. 
 
 Libraries are available for most popular programming languages which implement the OAuth protocol, and developers are advised to make use of these libraries where possible.
+
+
+Once an application has obtained 
+   X an OAuth token and 
+   X secret for a user 
+it may use these as credentials to make authenticated requests on behalf of that user. Authenticated requests are made via an encrypted channel to https://api.typepad.com/. Anonymous requests are not allowed to the SSL endpoints. 
+
+The OAuth credentials must be provided via a WWW-Authenticate HTTP request header whose scheme is OAuth, as described in the OAuth 1.0a specification, section 7. Using the WWW-Authenticate header is required for all endpoints except those few which specifically permit using the query string. 
+? OK, API endpoints are using WWW-Authenticate, but how to call them?

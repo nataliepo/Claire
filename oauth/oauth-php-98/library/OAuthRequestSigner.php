@@ -122,11 +122,18 @@ class OAuthRequestSigner extends OAuthRequest
 
 		$this->setParam('oauth_signature_method',$signature_method);
 		$this->setParam('oauth_signature',		 '');
-		$this->setParam('oauth_nonce', 			 !empty($secrets['nonce'])     ? $secrets['nonce']     : uniqid(''));
+//		$this->setParam('oauth_nonce', 			 !empty($secrets['nonce'])     ? $secrets['nonce']     : uniqid(''));
+      $nonce = mt_rand(0, 4294967296);
+      $this->setParam('oauth_nonce', $nonce);
+
 		$this->setParam('oauth_timestamp', 		 !empty($secrets['timestamp']) ? $secrets['timestamp'] : time());
 		$this->setParam('oauth_token', 		 	 $token);
 		$this->setParam('oauth_consumer_key',	 $secrets['consumer_key']);
+
+//    modifying this to work with TypePad.
 		$this->setParam('oauth_version',		 '1.0');
+//      $this->setParam('oauth_version',		 '1.0a');
+   
 		
 		$body = $this->getBody();
 		if (!is_null($body))

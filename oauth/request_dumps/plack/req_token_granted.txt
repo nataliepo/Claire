@@ -1,0 +1,62 @@
+'params' => {
+   'callback_confirmed' => 'true'
+},
+'browser' => bless( {
+   'max_redirect' => 0,
+   'protocols_forbidden' => undef,
+   'show_progress' => undef,
+   'handlers' => {
+       'response_header' => bless( [
+        {
+            'owner' => 'LWP::UserAgent::parse_head',
+            'callback' => sub { "DUMMY" },
+            'm_media_type' => 'html',
+            'line' => '/Library/Perl/5.8.8/LWP/UserAgent.pm:612'
+       }
+     ], 'HTTP::Config' )
+  },
+   'no_proxy' => [],
+   'protocols_allowed' => undef,
+   'local_address' => undef,
+   'use_eval' => 1,
+   'requests_redirectable' => [
+     'GET',
+     'HEAD'
+   ],
+   'timeout' => 180,
+   'def_headers' => bless( {
+        'user-agent' => 'libwww-perl/5.834'
+   }, 'HTTP::Headers' ),
+   'proxy' => {},
+   'max_size' => undef
+}, 'LWP::UserAgent' ),
+
+'tokens' => {
+    'request_token' => 'eaa4457b96bf7a675d3a5cf52839c9dde7b1e0768c1d6ecdedff813f78ae3d5b22dc3e2fd99f56fa2fc2411ba04bd4070a43728726a2e95e2b8d7b66829d806b',
+    'request_token_secret' => 'JZDrjdgzbKwP3g5v',
+    'access_token_secret' => undef,
+    'access_token' => undef,
+    'consumer_secret' => 'K0J0Im71',
+    'consumer_key' => 'c5139cef2985b86d'
+},
+
+'protocol_version' => '1.0a',
+
+'urls' => {
+  'request_token_url' => 'https://www.typepad.com/secure/services/oauth/request_token',
+  'authorization_url' => 'https://www.typepad.com/secure/services/api/6p0133ec3d788a970b/oauth-approve',
+  'access_token_url' => 'https://www.typepad.com/secure/services/oauth/access_token'
+}
+
+
+
+
+
+
+======
+Get Authorization URL value:
+https://www.typepad.com/secure/services/api/6p0133ec3d788a970b/oauth-approve
+   ?
+   oauth_token=eaa4457b96bf7a675d3a5cf52839c9ddd6f7ff73b4e6502507a1b180a32359431f4ea032a604069d0e626dc4237ce441fe6157756f372173ff7daa08bec84891
+   &
+   callback=http%3A%2F%2F127.0.0.1%3A5000%2Flogin-callback
