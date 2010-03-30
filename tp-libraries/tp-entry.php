@@ -131,8 +131,10 @@ class Entry {
     // passing a JSON object reduces the number of requests.
     // passing an XID makes another request to get lots of information.
     function Entry($xid, $entry_json = '') {
-       if ($entry_json == '') {
-          $entry_json = pull_json(get_entry_api_url($xid));
+//       if ($entry_json == '') {
+//         if (!isset($entry_json)) {
+         if (!$entry_json) {
+            $entry_json = pull_json(get_entry_api_url($xid));
        }
        
        // otherwise, ($type == 'json'), format is ready to parse. 

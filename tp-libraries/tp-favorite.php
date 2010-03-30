@@ -50,7 +50,7 @@ class Favorite {
 
    // contructor
    function Favorite($xid, $favorite_json = '') {
-      if ($favorite_json == '') {
+      if (!$favorite_json) {
          $favorite_json = pull_json(get_favorite_api_url($xid));
       }
       

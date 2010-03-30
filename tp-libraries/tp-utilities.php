@@ -1,6 +1,7 @@
 <?php
 
     include_once('tp-config.php');
+    include_once('json_lib.php');
 
     // default set in config.
     global $debug_mode;
@@ -26,7 +27,8 @@ function get_resized_avatar ($user, $size) {
 }
 
 function get_entry_title($entry) {
-    if ($entry->title) {
+   if ($entry->title) {
+//    if ($entry->title) {
         return $entry->title;
     }
     else {
@@ -134,7 +136,24 @@ function pull_json ($url, $decode=1) {
    $handle = fopen($url, "rb");
    $doc = stream_get_contents($handle);
    if ($decode) {
+      if (!function_exists('json_decode')) {
+         
+         function json_decode($doc, $assoc=false) {
+//            require_once 'classes/JSON.php';
+            if ($assoc) {
+               $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
+            }
+            else {
+               $json = new Services_JSON;
+            }
+            $result =  $json->decode($doc);
+            return $result;
+         }
+      }
+
+
       return json_decode($doc);
+      
    }
    else {
       return $doc;
