@@ -55,9 +55,9 @@ class TPConnectEntry {
       $json = '{"permalinkUrl":"' . $permalink . '"}';
       $post_url = get_tpconnect_external_assets_api_url($blog_xid);
       # First, get the 
-      $events = post_json($post_url, $json);
+//      $events = post_json($post_url, $json);
 
-      $this->xid = $events->asset->urlId;
+//      $this->xid = $events->asset->urlId;
       
       $this->tp_comment_listing = array();
       $this->blog_xid = $blog_xid;
@@ -248,6 +248,7 @@ class Entry {
 /*** Makes the Rousseau request. ***/
 function rousseaus_comments ($params) {
 //   return pull_json(ROUSSEAU_COMMENTS_URL . '?' . $params, 0);
+
    return post_text(ROUSSEAU_COMMENTS_URL, $params, 0);
 } 
  
