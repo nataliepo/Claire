@@ -55,7 +55,8 @@
                        'access_token_uri' => $endpoint_strs['oauth-access-token-endpoint']
                       );
 
-     $user_id = 1;   
+//     $user_id = 1;   
+   $user_id = get_user_id(COOKIE_NAME, 1);
 
      /* 
     

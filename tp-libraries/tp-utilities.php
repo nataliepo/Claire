@@ -133,7 +133,9 @@ function pull_json ($url, $decode=1) {
    if ($GLOBALS['debug_mode']) {
       echo "<p class='request'>[PULL_JSON], URL = <a href='$url'>$url</a></p>";
    }
+
    $handle = fopen($url, "rb");
+
    $doc = stream_get_contents($handle);
    if ($decode) {
       if (!function_exists('json_decode')) {
@@ -217,6 +219,188 @@ function print_timestamp_from_epoch ($time) {
 }
 
 
+
+/*****************
+ * Useful methods...for Oauth
+ *******************/
+ 
+function print_as_table($array) {
+    print "<table border='1'><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>";
+    foreach(array_keys($array) as $key) {
+       print "<tr><td>$key</td><td>$array[$key]</td></tr>";
+    }
+    print "</tbody></table>";
+ }
+
+ function remember_author ($author) {
+    // Check if this author exists first.
+    $id = get_id($author->xid);
+    if ($id) {
+       return $id;
+    }
+
+    $escaped_name = str_replace("'", "\'", $author->display_name);
+
+    // otherwise, create a new record.
+    $query = "INSERT INTO USERS (user_tp_xid, user_name) VALUES ('" . 
+                $author->xid . "', '" . $escaped_name . "');";
+
+    $result = mysql_query($query);
+
+    // Now, get the author's id from the db.
+    return get_id($author->xid);
+ }
+
+ function get_users() {
+    $query = "SELECT * FROM users;";
+
+    $result = mysql_query($query);
+    $users = array();
+
+//      $cols = array('id', 'tp_xid', 'oauth_id', 'name');
+    $cols = array('id', 'tp_xid', 'name');
+
+    for ($i = 0; $i < mysql_num_rows($result); $i++) {
+       $this_user = array();
+       foreach ($cols as $col) {
+          $this_user['user_' . $col] = mysql_result($result, $i, "user_" . $col);
+       }
+       $users[] = $this_user;
+    }
+
+    return $users;
+ }
+
+ function get_id($xid) {
+    $query = "SELECT * FROM users where user_tp_xid='$xid';";
+    debug ("[get_id] Query: $query");
+    $result = mysql_query($query);
+
+    if (!$result ||
+        !mysql_num_rows($result)) {
+       return 0;
+    }
+    
+    // otherwise, it exists
+    return mysql_result($result, 0, "user_id");
+ }
+ 
+
+function get_user_id($cookie_name, $create_ifne=0) {
+   $user_id = 0;
+   if (array_key_exists($cookie_name, $_COOKIE)) {
+      return $_COOKIE[$cookie_name];
+   }
+   
+   if ($create_ifne) {
+      $user_id =  create_temp_user();
+      setcookie(COOKIE_NAME, $user_id);
+   }
+   
+   return $user_id;
+}
+
+function create_temp_user() {
+   // Make a temporary row.
+
+   $rando = uniqid();
+   $query = "INSERT INTO users (user_tp_xid, user_name) VALUES ('$rando', '');"; 
+
+   debug ("[create_temp_user] Query = $query ");
+   $result = mysql_query($query);
+   
+   if (!$result) {
+      debug ("[create_temp_user] QUERY INSERT WENT BAD");
+   }
+   
+   return get_id($rando);
+}
+
+function replace_oauth_author($old_author, $new_author) {
+   $query = "update oauth_consumer_token set oct_usa_id_ref=$new_author where oct_usa_id_ref=$old_author;";
+   $result = mysql_query($query);
+}
+
+function delete_author($id) {
+   $query = "delete from users where user_id=$id;";
+   $result = mysql_query($query);
+}
+
+
+function get_oauth_token($cookie_name, $params, $store) {
+   // The OAuth token is in one of two places:
+   $oauth_token = "";
+   
+   // 1. The URL parameter (as in, it's super new.)
+   if (array_key_exists('oauth_token', $params)) {
+      $oauth_token = $params['oauth_token'];
+      // Make sure it's been written to the DB for this user.
+      debug ("[get_oauth_token] The OAUth token was passed in the URL and = $oauth_token");
+   }
+   
+   
+   // 2. it resides in the DB.  key off of the user_id cookie.
+   else if (array_key_exists($cookie_name, $_COOKIE)) {
+      $oauth_token = get_oauth_token_from_db($cookie_name, $params, $store);
+   }
+   
+   return $oauth_token;
+}
+
+function get_oauth_token_from_db($cookie_name, $params, $store) {
+   $tokens = $store->listServerTokens($_COOKIE[$cookie_name]);
+
+//    var_dump($tokens);
+    debug("[get_oauth_token] all tokens = ^");
+    if (sizeof($tokens) >= 1) {
+       return $oauth_token = $tokens[0]['token'];
+    }
+    else {
+       return 0;
+    }
+}
+
+function verify_access_token  ($access_endpoint_url, $user_id, $store, $verifier) {
+
+   $r		= $store->getServer(CONSUMER_KEY, $user_id);
+
+   // make a generic Request object, and then sign it with the secret token
+   $oauth 	= new OAuthRequester($access_endpoint_url, 'GET');
+   
+   debug("[verify_access_token] Verify endpoint url = $access_endpoint_url");
+   
+//   var_dump($r);
+   debug("[verify_access_token] r = ^");
+     
+   try {
+      $oauth->sign($user_id, $r);
+   }
+   catch (OAuthException2 $e) {
+      debug ("No server tokens available for this URL parameter; you should sign in!");
+      debug ("error = $e");
+   }
+     
+   
+   $final_url = $access_endpoint_url . "?";
+
+   $parameters = array('timestamp', 'nonce', 'consumer_key', 
+                         'version', 'signature_method', 'signature', 'token');
+
+   foreach ($parameters as $parm) {
+      $final_url .= 'oauth_' . $parm . '=' . $oauth->getParam('oauth_' . $parm) . '&';
+   }  
+   
+   // don't forget the verifier!
+   $final_url .= 'oauth_verifier=' . $verifier;
+   
+   debug ("[verify_access_token] FINAL URL: $final_url");
+   
+
+   $handle = fopen($final_url, "rb");
+   return stream_get_contents($handle);
+}
+
+
 /*****************************
  * REQUIRED INCLUDES
  *****************************/
@@ -228,5 +412,7 @@ include_once('tp-date.php');
 
 // Required for Facebook Commenting.
 /*include_once ('fb-std-libraries/includes/facebook.php'); */
+
+
 
 ?>
