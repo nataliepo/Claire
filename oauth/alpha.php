@@ -1,5 +1,4 @@
 <?php
-      define ('CONSUMER_KEY', 'c5139cef2985b86d');
       
       include_once ("oauth-php-98/library/OAuthStore.php");
       include_once ("oauth-php-98/library/OAuthRequester.php");
@@ -22,7 +21,7 @@
       */
       $url = 'http://api.typepad.com/api-keys/' . CONSUMER_KEY . '.json';      
       $handle = fopen($url, "rb");
-      $doc = json_decode(stream_get_contents($handle));
+      $doc = claire_json_decode(stream_get_contents($handle));
                   
       $owner = $doc->owner;
       
@@ -43,7 +42,7 @@
       */
       
       $server = array('consumer_key' => CONSUMER_KEY, 
-                       'consumer_secret' => 'K0J0Im71',
+                       'consumer_secret' => CONSUMER_SECRET,
                        'server_uri' => 'http://api.typepad.com/',
 //                       'signature_methods' => array('HMAC-SHA1', 'PLAINTEXT'),
                          'signature_methods' => array('PLAINTEXT'),
@@ -67,6 +66,9 @@
      * I wish the PHP OAuth code would not error out but just move on...
      */
      $servers = $store->listServers('', $user_id);
+     
+     debug ("just called list servers and response = ^" . var_dump($servers));
+     
      if ($servers[0] &&
          ($servers[0]['consumer_key'] == CONSUMER_KEY)) {
             $store->deleteServer(CONSUMER_KEY, $user_id);
@@ -89,7 +91,7 @@
 		// This creates a generic Request object.
       $oauth 	= new OAuthRequester($uri, $method, $params);
 //		$oauth->setParam('oauth_callback', 'http://127.0.0.1/claire/oauth/beta.php');
-		$oauth->setParam('oauth_callback', 'http://127.0.0.1/claire/oauth/index.php');
+		$oauth->setParam('oauth_callback', CALLBACK_URL);
 
       // ..and this adds more parameters, like the timestamp, nonce, version, signature method, etc
       $oauth->sign($user_id, $r);

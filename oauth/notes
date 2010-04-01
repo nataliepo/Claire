@@ -1,0 +1,49 @@
+DEPLOYMENT NOTES:
+
+
+1. place oauth/ and tp-libraries/ at the same level on a webserver
+
+
+2. create the OAuth database
+   oauth/oauth-php-98/library/store/mysql/mysql.sql
+   
+   
+3. create the users database
+
+   mysql> create table users (user_id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (user_id), user_tp_xid varchar(20), user_name MEDIUMTEXT);
+   
+   
+   mysql> show columns from users;
+   +-------------+-------------+------+-----+---------+----------------+
+   | Field       | Type        | Null | Key | Default | Extra          |
+   +-------------+-------------+------+-----+---------+----------------+
+   | user_id     | int(11)     | NO   | PRI | NULL    | auto_increment |
+   | user_tp_xid | varchar(20) | YES  |     | NULL    |                |
+   | user_name   | mediumtext  | YES  |     | NULL    |                |
+   +-------------+-------------+------+-----+---------+----------------+
+   3 rows in set (0.01 sec)
+   
+   
+You should have all of these tables;
+
+
+   mysql> show tables;
+   +-------------------------+
+   | Tables_in_oauth_test    |
+   +-------------------------+
+   | oauth_consumer_registry |
+   | oauth_consumer_token    | 
+   | oauth_log               | 
+   | oauth_server_nonce      | 
+   | oauth_server_registry   | 
+   | oauth_server_token      | 
+   | users                   | 
+   +-------------------------+
+   7 rows in set (0.00 sec)
+   
+4. MODIFY THE DEFINITION OF OAUTH MYSQL TABLE to support a very long oauth_token value.  TypePad's is longer than what this library gives you by default.
+
+   mysql> alter table oauth_consumer_token change oct_token oct_token varchar(170);
+   
+   
+4. Obtain a CONSUMER KEY from http://www.typepad.com/account/access/developer . 

@@ -32,7 +32,7 @@
    // table, but i'm not sure if they are right now -- requesting anyway!
    $url = 'http://api.typepad.com/api-keys/' . CONSUMER_KEY . '.json';      
    $handle = fopen($url, "rb");
-   $doc = json_decode(stream_get_contents($handle));
+   $doc = claire_json_decode(stream_get_contents($handle));
         
    $owner = $doc->owner;
 
@@ -105,10 +105,29 @@
       // don't forget the verifier!
       $final_url .= 'oauth_verifier=' . $_GET['oauth_verifier'];
 
+      debug ("FINAL URL = $final_url");
+
+/********
+  * THIS GENERATES ERRORS IN PHP 5.1.X
+  *      $handle = fopen($final_url, "rb");
+  *      $doc = stream_get_contents($handle);
+  *******/
+  
+/********
+  * THIS GENERATES ERRORS locally. probably doesn't work.
+      $ch = curl_init($final_url);   
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER,  true);
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION,  1);
+      curl_setopt($ch, CURLOPT_HEADER,          false); 
+
+      $doc = json_decode(curl_exec($ch));
+      curl_close($ch);
+ *******/
 
       $handle = fopen($final_url, "rb");
       $doc = stream_get_contents($handle);
-
+      
+      
       // Successful verification.
       if ($doc) {
       
@@ -118,6 +137,9 @@
             $pair = explode("=", $response_str);
             $response[$pair[0]] = $pair[1];
          }   
+         
+         debug ("after stream_get_contents(), response = ^ " . var_dump($response));
+         
 
          $r		    = $store->getServerTokenSecrets(CONSUMER_KEY, $_GET['oauth_token'], 'request', $user_id);
          $token_name	= $r['token_name'];
@@ -181,6 +203,7 @@
 
       $author = new Author(1, $response);
       
+      debug ("[index.php] calling remember_author()");
       $oauth_user_id = remember_author($author);
       
       debug ("[final_request] This author's id is $oauth_user_id");
@@ -188,7 +211,8 @@
       setcookie(COOKIE_NAME, $oauth_user_id);
       
       // If our cookie has a temporary author record...
-      if ($_COOKIE[COOKIE_NAME] != $oauth_user_id) {
+      if (($_COOKIE[COOKIE_NAME] != $oauth_user_id) and
+          ($oauth_user_id)){
          
          $old_oauth_id = $_COOKIE[COOKIE_NAME];
          
@@ -222,13 +246,13 @@
 <body>
    <h2>TypePad Loves You!</h2>
 
-   <a class="next" href="index.php?logout=1">Start Session Over</a>
+   <a class="next" href="index.php?logout=1">Log Out</a>
 
 <?php
    
    if (!$author or
        !$is_logged_in) {      
-      echo "<h3 align='center'>Your session has expired.  <a href='alpha.php'>Log In</a> again!</h3>";
+      echo "<h3 align='center'><a href='alpha.php'>Log In</a>!</h3>";
    }
    else {
       echo "<h3 align='center'>Welcome, <a href='" . $author->profile_url . "'>" . 

@@ -234,7 +234,10 @@ function print_as_table($array) {
 
  function remember_author ($author) {
     // Check if this author exists first.
+    debug ("[remember_author] this author's xid" . $author->xid);
+
     $id = get_id($author->xid);
+    
     if ($id) {
        return $id;
     }
@@ -242,9 +245,11 @@ function print_as_table($array) {
     $escaped_name = str_replace("'", "\'", $author->display_name);
 
     // otherwise, create a new record.
-    $query = "INSERT INTO USERS (user_tp_xid, user_name) VALUES ('" . 
+    $query = "INSERT INTO users (user_tp_xid, user_name) VALUES ('" . 
                 $author->xid . "', '" . $escaped_name . "');";
-
+             
+    debug ("[remember_author] about to insert a new author with this query: $query");
+   
     $result = mysql_query($query);
 
     // Now, get the author's id from the db.
@@ -398,6 +403,27 @@ function verify_access_token  ($access_endpoint_url, $user_id, $store, $verifier
 
    $handle = fopen($final_url, "rb");
    return stream_get_contents($handle);
+}
+
+function claire_json_decode($str) {
+
+   if (!function_exists('json_decode')) {
+
+      function json_decode($doc, $assoc=false) {
+   //            require_once 'classes/JSON.php';
+         if ($assoc) {
+            $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
+         }
+         else {
+            $json = new Services_JSON;
+         }
+            
+         $result =  $json->decode($doc);
+         return $result;
+      }
+   }
+   
+   return json_decode($str);
 }
 
 
