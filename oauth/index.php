@@ -81,10 +81,22 @@
       debug ("[JUST GOT ACCESS TOKEN, ATTEMPTING TO VERIFY...]");
       try {
          $r = $store->getServerTokenSecrets(CONSUMER_KEY, $_GET['oauth_token'], 
-                                          'request', $user_id);
+                                            'request', $user_id);
       }
       catch (OAuthException2 $e) {
          var_dump($e);
+         echo "<h2>[OAuth Exception 2]</h2>";
+         
+         // If we're catching an exception here, it's likely that a user is refreshing the page after
+         // they've submitted once.  Try to use the DB-stored oauth token instead...
+         try {
+            $r = $store->getServerTokenSecrets(CONSUMER_KEY, get_oauth_token_from_db(COOKIE_NAME, $_GET, $store),
+                                               'request', $user_id);
+         }
+         catch (OAuthException2 $e) {
+            var_dump($e);
+            debug ("Loading the Token Secrets off the token in the DB did not work.");
+         }
       }
 
 
@@ -138,7 +150,7 @@
             $response[$pair[0]] = $pair[1];
          }   
          
-         debug ("after stream_get_contents(), response = ^ " . var_dump($response));
+//         // debug ("after stream_get_contents(), response = ^ " . var_dump($response));
          
 
          $r		    = $store->getServerTokenSecrets(CONSUMER_KEY, $_GET['oauth_token'], 'request', $user_id);

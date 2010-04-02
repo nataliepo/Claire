@@ -67,11 +67,17 @@
      */
      $servers = $store->listServers('', $user_id);
      
+     debug ("User ID here  = $user_id");
      debug ("just called list servers and response = ^" . var_dump($servers));
      
-     if ($servers[0] &&
-         ($servers[0]['consumer_key'] == CONSUMER_KEY)) {
+
+     foreach ($servers as $server_item) {
+        
+        if (($server_item['consumer_key'] == CONSUMER_KEY) &&
+            ($server_item['user_id'] == $user_id)) {
+            debug ("User_id = $user_id, ");
             $store->deleteServer(CONSUMER_KEY, $user_id);
+         }
       }
       
       $consumer_key = $store->updateServer($server, $user_id);
@@ -87,9 +93,10 @@
 */
    
       $r		= $store->getServer(CONSUMER_KEY, $user_id);
+
 		
 		// This creates a generic Request object.
-      $oauth 	= new OAuthRequester($uri, $method, $params);
+      $oauth 	= new OAuthRequester($endpoint_strs['oauth-request-token-endpoint'], '', '');
 //		$oauth->setParam('oauth_callback', 'http://127.0.0.1/claire/oauth/beta.php');
 		$oauth->setParam('oauth_callback', CALLBACK_URL);
 
@@ -119,18 +126,21 @@
       */
       $handle = fopen($final_url, "rb");
       $doc = stream_get_contents($handle);     
-      $response_array = split("&", $doc);
+      $response_array = explode("&", $doc);
    
       // Store the results!  Anything but 200 will croak to the browser for now.
       $response = array();
       foreach ($response_array as $response_str) {
-         $pair = split("=", $response_str);
+         $pair = explode("=", $response_str);
          $response[$pair[0]] = $pair[1];
       }
 
       // Instead of storing the Request token as a cookie, write it to the db.
       $store->addServerToken(CONSUMER_KEY, 'request', $response['oauth_token'], 
-                             $response['oauth_token_secret'], $user_id, $opts);
+                             $response['oauth_token_secret'], $user_id, '');
+                             
+     var_dump($oauth);
+     debug ("After creating a simple request token, store obj = ^ ");
 	
    /*
       Next step in the OAuth Dance: Redirect your user to the Provider.

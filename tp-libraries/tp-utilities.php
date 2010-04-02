@@ -322,8 +322,35 @@ function create_temp_user() {
 }
 
 function replace_oauth_author($old_author, $new_author) {
+   // Update the token record first...
    $query = "update oauth_consumer_token set oct_usa_id_ref=$new_author where oct_usa_id_ref=$old_author;";
    $result = mysql_query($query);
+   
+   // You cannot have duplicate entries for ocr_usa_id_ref records, so delete any if they already exist.
+   $query = "delete from oauth_consumer_registry where ocr_usa_id_ref=$new_author;";
+   $result = mysql_query($query);
+   
+   // Then update the server registry record.
+   $query = "update oauth_consumer_registry set ocr_usa_id_ref=$new_author where ocr_usa_id_ref=$old_author;";
+   debug ("[replace_oauth_author] query = $query");
+   $result = mysql_query($query);   
+   
+   // Finally, link the oauth_consumer_token record to the updated server registry record.
+   $query = "select ocr_id from oauth_consumer_registry where ocr_usa_id_ref=$new_author;";
+   $result = mysql_query($query);
+   
+   if ($result && mysql_num_rows($result)) {
+      // otherwise, it exists
+      $id = mysql_result($result, 0, "ocr_id");
+      
+      // update the oauth_consumer_token to be associated with this row's registry.
+      $query = "update oauth_consumer_token set oct_ocr_id_ref=$id where oct_usa_id_ref=$new_author;";
+      debug ("[replace_oauth_author], query = $query");
+      $result = mysql_query($query);
+   }
+   else {
+      debug ("[replace_oauth_author] There was an error with the query $query");
+   }
 }
 
 function delete_author($id) {

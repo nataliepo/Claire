@@ -321,11 +321,15 @@ abstract class OAuthStoreSQL extends OAuthStoreAbstract
 			$ttl = "'9999-12-31'";
 		}
 		
+		// THIS IS A BUG
 		$ocr_id = $this->query_one('
 					SELECT ocr_id
 					FROM oauth_consumer_registry
 					WHERE ocr_consumer_key = \'%s\'
-					', $consumer_key);
+					and
+					ocr_usa_id_ref=%d
+					', $consumer_key,
+					$user_id);
 					
 		if (empty($ocr_id))
 		{
