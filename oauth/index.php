@@ -138,7 +138,7 @@
 
       $handle = fopen($final_url, "rb");
       $doc = stream_get_contents($handle);
-      
+      fclose($handle);
       
       // Successful verification.
       if ($doc) {
