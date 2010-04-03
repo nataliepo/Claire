@@ -28,7 +28,8 @@
    <li><a href="http://mtcs-demo.apperceptive.com/testmt/recent_news/">Blog Index</a></li>
    <li><a href="http://mtcs-demo.apperceptive.com/testmt/recent_news/tab.php">tab.php</a> serving the FB Fan page.  View source to see the <code><fb:comment></code> blocks and the xid parameters. </li>
    <li><a href="http://www.facebook.com/pages/Hobbitted/358069609094?v=app_368383693541&ref=ts">Demo FB App</a> as a tab on the Hobbitted Fan page</li>
-   <li>Quick example of <a href="http://mtcs-demo.apperceptive.com/testmt/recent_news/2010/03/performance-artist-mimics-performance-artist-at-moma.php">Rousseau in action</a></li>
+   <li><a href="http://mtcs-demo.apperceptive.com/testmt/recent_news/2010/03/performance-artist-mimics-performance-artist-at-moma.php">Rousseau in action</a> alongside a published entry</li>
+   <li>A few <a href="mt_blog_demo/">local pages</a> that pull comments from Rousseau</li>
 </ol>
 <p>Comment posting is happening through a TPConnect section at the bottom with the presentation of TypePad comments removed via JavaScript.  This is only until Claire supports comment posting without needing TPConnect's submission form.</p>
 <br />
