@@ -283,9 +283,6 @@
 
          if (sizeof($matches) > 0) {
             $author = new Author($user['user_tp_xid']);
-
-//            echo "Name: " . $user['user_name'] . ", TP_XID = " . $user['user_tp_xid'] . 
-//                     ", ID = " . $user['user_id'] . "</li>";
             echo "<li><img src='" . $author->avatar . "' /> " . 
                      "<a href='" . $author->profile_url . "'>". $author->display_name . "</a></li>";
          }

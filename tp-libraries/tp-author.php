@@ -1,26 +1,55 @@
 <?php
+   include_once('tp-utilities.php');
+   
 class Author {
     var $display_name;
     var $profile_url;
     var $avatar;
     var $xid;
+    var $username;
     
-    function Author($xid = 0, $author_json = '') {
+//    function Author($xid = 0, $author_json = '') {
+   function Author($params) {
+      
+      // Allow creationg of empty Author to allow
+      // other services to override it.
+      if ((!array_key_exists('xid', $params)) &&
+          (!array_key_exists('json', $params)) &&
+          (!array_key_exists('username', $params))) {
+         return;
+      }
+       
+      $identifier = array();
+      
+      // otherwise, remember the unique identifier for this user.
+      if (array_key_exists('xid', $params)) {
+         $identifier['value'] = $params['xid'];
+         $identifier['source'] = 'xid';
+      }
+      else {
+         $identifier['value'] = $params['username'];
+         $identifier['source'] = 'username';
+      }
+       
 
-       // Allow creationg of empty Author to allow
-       // other services to override it.
-       if (!$xid) {
-          return;
-       }
+      if (!array_key_exists('json', $params)) {
+         $params['json'] = pull_json(get_author_api_url($identifier['value']));
+      }
 
-       if (!$author_json) {
-          $author_json = pull_json(get_author_api_url($xid));
-       }
+      // in case the API request couldn't find that user, return.
+      if (!$params['json']) {
+         debug ("[Author::Author] The user identified by " . $identifier['source'] . "'" . 
+               $identifier['value'] . "' was not found.");
+         return;
+      }
+      
+      // At this point, we should have valid JSON.
        
        $this->xid = $author_json->urlId;
-       $this->display_name = $author_json->displayName;
-       $this->profile_url = $author_json->profilePageUrl;
-       $this->avatar = get_resized_avatar($author_json, 35);
+       $this->display_name = $params['json']->displayName;
+       $this->profile_url = $params['json']->profilePageUrl;
+       $this->username = $params['json']->preferredUsername;
+       $this->avatar = get_resized_avatar($params['json'], 35);
     }
 }
     

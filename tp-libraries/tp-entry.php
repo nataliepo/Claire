@@ -2,41 +2,7 @@
     include_once('tp-utilities.php');
     
 
-class EntryListing {
-     var $entry_array; 
-       
-       function build_entries_listing ($page_number) {
-          $events = pull_json(get_entries_api_url($page_number));
 
-          $i = 0;    
-          foreach($events->{'entries'} as $entry) {
-              $this->entry_array[$i] = new Entry($entry->urlId, $entry);
-              $i++;
-          }
-      }
-
-     // contructor
-     function EntryListing($page_number = 1) {
-         $this->entry_listing = array();
-         $this->build_entries_listing($page_number);
-     }
-     
-     function get_post_xid() {
-         return $this->post_xid;
-     }
-     
-     function comment($index) {
-         if ($this->comment_array[$index]) {
-             return $this->comment_array[$index];
-         }
-         return "";
-     }
-     
-     function entries() {
-         return $this->entry_array;
-     }
-}
- 
 
 class TPConnectEntry {
    var $xid;
@@ -130,26 +96,30 @@ class Entry {
     //  TWO INPUT TYPES: a JSON entry object, or an XID.
     // passing a JSON object reduces the number of requests.
     // passing an XID makes another request to get lots of information.
-    function Entry($xid, $entry_json = '') {
-//       if ($entry_json == '') {
-//         if (!isset($entry_json)) {
-         if (!$entry_json) {
-            $entry_json = pull_json(get_entry_api_url($xid));
+   function Entry($params) {
+      if (!array_key_exists('xid', $params)) {
+         debug ("[Entry::Entry] The entry XID is required in the constructor...");
+         return;
+      }
+
+      if (!array_key_exists('json', $params)) {
+            $params['json'] = pull_json(get_entry_api_url($params['xid']));
        }
        
        // otherwise, ($type == 'json'), format is ready to parse. 
-       $this->title = get_entry_title($entry_json);
-       $this->body = $entry_json->content;
-       $this->permalink = $entry_json->permalinkUrl;
-       $this->thumbnail = get_first_thumbnail($entry_json->embeddedImageLinks);
-       $this->xid = $entry_json->urlId;
-       $this->author = new Author($entry_json->author->urlId, $entry_json->author);
+       $this->title = get_entry_title($params['json']);
+       $this->body = $params['json']->content;
+       $this->permalink = $params['json']->permalinkUrl;
+       $this->thumbnail = get_first_thumbnail($params['json']->embeddedImageLinks);
+       $this->xid = $params['json']->urlId;
+       
+       $this->author = new Author(array(xid  => $params['json']->author->urlId,
+                                        json => $params['json']->author ));
 
        // GETTING RID OF DateTime for PHP 5.1.6 compatibility
 //       $date =  new DateTime($entry_json->published);
 //       $this->timestamp = print_timestamp($date);
-      $this->timestamp = new TPDate($entry_json->published);
-
+      $this->timestamp = new TPDate($params['json']->published);
     }
     
       
@@ -166,7 +136,7 @@ class Entry {
     }
     
     function build_comment_listing () {
-       $this->comment_listing = new TPCommentListing($this->xid);
+       $this->comment_listing = new TPCommentListing(array(xid => $this->xid));
     }
     
     function build_favorite_listing() {

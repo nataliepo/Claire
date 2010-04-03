@@ -54,7 +54,11 @@ class Favorite {
          $favorite_json = pull_json(get_favorite_api_url($xid));
       }
       
-      $this->author = new Author($favorite_json->author->urlId, $favorite_json->author);
+//      $this->author = new Author(array(xid  => $favorite_json->author->urlId,
+//                                       json => $favorite_json->author));
+
+      $this->author = new Author(array(json => $favorite_json->author));
+                                       
       $this->xid = $favorite_json->urlId;
       
 /*     $date =  new DateTime($favorite_json->published);

@@ -75,12 +75,10 @@ function get_first_thumbnail ($embedded_array) {
     return $embedded_array[0]->url;
 }
 
-function get_entries_api_url ($page_number) {
-    return ROOT_TYPEPAD_API_URL . '/blogs/' . BLOG_XID . '/post-assets' . 
-        # This doesn't work for some reason.
-        #'/@published' . 
-        '.json' .'?max-results=' . POSTS_PER_PAGE . 
-        '&start-index=' . ((($page_number-1) * POSTS_PER_PAGE) + 1);
+function get_entries_api_url ($params) {
+    return ROOT_TYPEPAD_API_URL . '/blogs/' . $params['xid'] . '/post-assets' . 
+        '.json' .'?max-results=' . $params['posts_per_page'] . 
+        '&start-index=' . ((($params['page_number']-1) * $params['posts_per_page']) + 1);
 }
 
 function get_entry_api_url ($xid) {
@@ -130,35 +128,18 @@ function get_favorite_api_url ($xid) {
 **/
 function pull_json ($url, $decode=1) { 
    
-   if ($GLOBALS['debug_mode']) {
-      echo "<p class='request'>[PULL_JSON], URL = <a href='$url'>$url</a></p>";
-   }
+   debug("<p class='request'>[PULL_JSON], URL = <a href='$url'>$url</a></p>");
 
-   $handle = fopen($url, "rb");
-
-   $doc = stream_get_contents($handle);
+   $ch = curl_init ($url);
+   curl_setopt($ch, CURLOPT_HEADER, 0);
+   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+   $result = curl_exec($ch);
+   
    if ($decode) {
-      if (!function_exists('json_decode')) {
-         
-         function json_decode($doc, $assoc=false) {
-//            require_once 'classes/JSON.php';
-            if ($assoc) {
-               $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
-            }
-            else {
-               $json = new Services_JSON;
-            }
-            $result =  $json->decode($doc);
-            return $result;
-         }
-      }
-
-
-      return json_decode($doc);
-      
+      return claire_json_decode($result);
    }
    else {
-      return $doc;
+      return $result;
    }
 }
 
@@ -462,6 +443,7 @@ include_once('tp-entry.php');
 include_once('tp-favorite.php');
 include_once('tp-author.php');
 include_once('tp-date.php');
+include_once('tp-blog.php');
 
 // Required for Facebook Commenting.
 /*include_once ('fb-std-libraries/includes/facebook.php'); */

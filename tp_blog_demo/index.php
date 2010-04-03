@@ -8,12 +8,14 @@
       $post_xid = '6a00e5539faa3b88330120a7b004e2970b';
                 
       $page_number = 1;
-      if ( ($_SERVER['REQUEST_METHOD'] == 'GET') &&
-         (array_key_exists('page', $_GET))) {
+      if (array_key_exists('page', $_GET)) {
             $page_number = $_GET['page'];
       }
             
-      $entry_listing = new EntryListing($page_number);
+//      $entry_listing = new EntryListing($page_number);
+      $entry_listing = new EntryListing(array(xid => BLOG_XID, 
+                                              page_number => $page_number));
+      
       $entries = $entry_listing->entries();
    ?>
         
@@ -45,7 +47,7 @@
         
    <?php  
       if($page_number == 1) {
-         echo "<a class='next' href='index.php?page=2'>Next Page &gt;&gt;</a>";
+         echo "<a class='next' href='index.php?page=" . ($page_number + 1) . "'>Next Page &gt;&gt;</a>";
       }
       else {
          echo "<a class='prev' href='index.php'>&lt;&lt; Previous Page</a>";

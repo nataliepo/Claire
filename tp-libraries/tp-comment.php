@@ -32,7 +32,8 @@
              $comment_json = pull_json(get_entry_api_url($xid));
           }
 
-          $this->author = new Author($comment_json->author->urlId, $comment_json->author);
+          $this->author = new Author(array(xid => $comment_json->author->urlId,        
+                                           json => $comment_json->author));
           $this->content = $comment_json->content;
           $this->xid = $comment_json->urlId;
 
@@ -66,11 +67,17 @@ class TPCommentListing {
       }
    }
       
-   // contructor
-   function TPCommentListing($post_xid = "") {
-      $this->post_xid = $post_xid;
+   // contructor - expects the XID of the entry.
+//   function TPCommentListing($post_xid = "") {
+   function TPCommentListing($params) {
+      if (!array_key_exists('xid', $params)) {
+         debug ("[TPCommentListing::TPCommentListing] Expected parameter 'xid' in the constructor.");
+         return;
+      }
+      
+      $this->post_xid = $params['xid'];
       $this->comment_listing = array();
-      $this->build_comment_listing($post_xid);
+      $this->build_comment_listing($params['xid']);
    }
      
    function get_post_xid() {
