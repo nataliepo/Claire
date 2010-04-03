@@ -16,6 +16,7 @@
 //            $braided_comments = $entry->braided_comments();
 //            $braided_comments = $entry->comments();
             $comments = $entry->rousseaus_listing();
+
          ?>
          
          <title>Claire: <?php echo $entry->title; ?></title>
@@ -65,7 +66,7 @@
            <h5>Comments</h5>
 
               <?php
-                  /*
+/*
                  foreach ($braided_comments as $comment) {
                     echo '
             <div class="comment-outer">
@@ -77,7 +78,8 @@
                   wrote <p>' . $comment->content . '</p> on ' . $comment->time() . '<br />
                </div>
             </div>';                  
-                 }  */
+                 }  
+*/
                  echo $comments;
                  
               ?>

@@ -9,7 +9,7 @@
                 
       $page_number = 1;
       if ( ($_SERVER['REQUEST_METHOD'] == 'GET') &&
-         ( $_GET['page'] != '')) {
+         (array_key_exists('page', $_GET))) {
             $page_number = $_GET['page'];
       }
             
