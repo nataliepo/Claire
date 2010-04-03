@@ -3,3 +3,4 @@
 
 # Installation
 * Download the Claire code into a folder on your webserver.  The index.php should lead you to the examples.
+

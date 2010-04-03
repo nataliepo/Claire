@@ -28,8 +28,7 @@
       $response[$key] = $_GET[$key];
    }
      
-   // this gets the API urls again; they should probably be stored in the sql
-   // table, but i'm not sure if they are right now -- requesting anyway!
+   // this should be replaced with a db lookup...
    $url = 'http://api.typepad.com/api-keys/' . CONSUMER_KEY . '.json';      
    $handle = fopen($url, "rb");
    $doc = claire_json_decode(stream_get_contents($handle));
