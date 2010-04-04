@@ -26,6 +26,10 @@ class Author {
          $identifier['value'] = $params['xid'];
          $identifier['source'] = 'xid';
       }
+      else if (array_key_exists('json', $params)) {
+         $identfier['value'] = $params['json']->urlId;
+         $identifier['source'] = 'json';
+      }
       else {
          $identifier['value'] = $params['username'];
          $identifier['source'] = 'username';

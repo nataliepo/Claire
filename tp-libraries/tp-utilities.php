@@ -166,9 +166,7 @@ function post_text ($url, $params, $decode=1) {
 }
 
 function post_json ($url, $params) {
-   if ($GLOBALS['debug_mode']) {
-      echo "<p class='request'>[POST_JSON], URL = <a href='$url'>$url</a></p>";
-   }
+   debug("[POST_JSON], URL = <a href='$url'>$url</a>");
 
    $ch = curl_init($url);
    curl_setopt($ch, CURLOPT_POST, 1);
@@ -214,9 +212,7 @@ function print_as_table($array) {
  }
 
  function remember_author ($author) {
-    // Check if this author exists first.
-    debug ("[remember_author] this author's xid" . $author->xid);
-
+    // check if the author exists.
     $id = get_id($author->xid);
     
     if ($id) {
@@ -228,8 +224,6 @@ function print_as_table($array) {
     // otherwise, create a new record.
     $query = "INSERT INTO users (user_tp_xid, user_name) VALUES ('" . 
                 $author->xid . "', '" . $escaped_name . "');";
-             
-    debug ("[remember_author] about to insert a new author with this query: $query");
    
     $result = mysql_query($query);
 
@@ -246,6 +240,10 @@ function print_as_table($array) {
 //      $cols = array('id', 'tp_xid', 'oauth_id', 'name');
     $cols = array('id', 'tp_xid', 'name');
 
+    if (!$result) {
+       return array();
+    }
+    
     for ($i = 0; $i < mysql_num_rows($result); $i++) {
        $this_user = array();
        foreach ($cols as $col) {
@@ -259,7 +257,6 @@ function print_as_table($array) {
 
  function get_id($xid) {
     $query = "SELECT * FROM users where user_tp_xid='$xid';";
-    debug ("[get_id] Query: $query");
     $result = mysql_query($query);
 
     if (!$result ||
@@ -291,8 +288,6 @@ function create_temp_user() {
 
    $rando = uniqid();
    $query = "INSERT INTO users (user_tp_xid, user_name) VALUES ('$rando', '');"; 
-
-   debug ("[create_temp_user] Query = $query ");
    $result = mysql_query($query);
    
    if (!$result) {
@@ -313,7 +308,6 @@ function replace_oauth_author($old_author, $new_author) {
    
    // Then update the server registry record.
    $query = "update oauth_consumer_registry set ocr_usa_id_ref=$new_author where ocr_usa_id_ref=$old_author;";
-   debug ("[replace_oauth_author] query = $query");
    $result = mysql_query($query);   
    
    // Finally, link the oauth_consumer_token record to the updated server registry record.
@@ -326,7 +320,6 @@ function replace_oauth_author($old_author, $new_author) {
       
       // update the oauth_consumer_token to be associated with this row's registry.
       $query = "update oauth_consumer_token set oct_ocr_id_ref=$id where oct_usa_id_ref=$new_author;";
-      debug ("[replace_oauth_author], query = $query");
       $result = mysql_query($query);
    }
    else {
@@ -348,9 +341,7 @@ function get_oauth_token($cookie_name, $params, $store) {
    if (array_key_exists('oauth_token', $params)) {
       $oauth_token = $params['oauth_token'];
       // Make sure it's been written to the DB for this user.
-      debug ("[get_oauth_token] The OAUth token was passed in the URL and = $oauth_token");
    }
-   
    
    // 2. it resides in the DB.  key off of the user_id cookie.
    else if (array_key_exists($cookie_name, $_COOKIE)) {
@@ -363,54 +354,12 @@ function get_oauth_token($cookie_name, $params, $store) {
 function get_oauth_token_from_db($cookie_name, $params, $store) {
    $tokens = $store->listServerTokens($_COOKIE[$cookie_name]);
 
-//    var_dump($tokens);
-    debug("[get_oauth_token] all tokens = ^");
     if (sizeof($tokens) >= 1) {
        return $oauth_token = $tokens[0]['token'];
     }
     else {
        return 0;
     }
-}
-
-function verify_access_token  ($access_endpoint_url, $user_id, $store, $verifier) {
-
-   $r		= $store->getServer(CONSUMER_KEY, $user_id);
-
-   // make a generic Request object, and then sign it with the secret token
-   $oauth 	= new OAuthRequester($access_endpoint_url, 'GET');
-   
-   debug("[verify_access_token] Verify endpoint url = $access_endpoint_url");
-   
-//   var_dump($r);
-   debug("[verify_access_token] r = ^");
-     
-   try {
-      $oauth->sign($user_id, $r);
-   }
-   catch (OAuthException2 $e) {
-      debug ("No server tokens available for this URL parameter; you should sign in!");
-      debug ("error = $e");
-   }
-     
-   
-   $final_url = $access_endpoint_url . "?";
-
-   $parameters = array('timestamp', 'nonce', 'consumer_key', 
-                         'version', 'signature_method', 'signature', 'token');
-
-   foreach ($parameters as $parm) {
-      $final_url .= 'oauth_' . $parm . '=' . $oauth->getParam('oauth_' . $parm) . '&';
-   }  
-   
-   // don't forget the verifier!
-   $final_url .= 'oauth_verifier=' . $verifier;
-   
-   debug ("[verify_access_token] FINAL URL: $final_url");
-   
-
-   $handle = fopen($final_url, "rb");
-   return stream_get_contents($handle);
 }
 
 function claire_json_decode($str) {
