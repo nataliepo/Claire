@@ -140,7 +140,7 @@ class Entry {
     }
     
     function build_favorite_listing() {
-       $this->favorite_listing = new FavoriteListing($this->xid);
+       $this->favorite_listing = new FavoriteListing(array(xid => $this->xid));
     }
     
     function build_fb_comment_listing() {

@@ -47,14 +47,6 @@
       echo "</ul>";  
    ?>
 <hr />
-<?php  
-     if($blog_entry_listing->has_next_page()) {
-        echo "<a class='next' href='?page=" . ($page_number + 1) . "'>Next Page &gt;&gt;</a>";
-     }
-     
-     if ($blog_entry_listing->has_prev_page()) {
-        echo "<a class='prev' href='?page=" . ($page_number - 1) . "'>&lt;&lt; Previous Page</a>";
-     }
-  ?>   
+  
 </body>
 </html>

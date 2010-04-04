@@ -61,7 +61,7 @@
 <p>TBD</p>
 
 <h3>Retrieving Comments from a Post </h3>
-<p>The <code>TPCommentListing</code> object will create a Comment Listing based on an entry's XID.  You can grab a post's comment listing by first creating a <code>Entry</code> object, then calling its <code>comments()</code> method, like this:
+<p>You can grab a post's comment listing by first creating a <code>Entry</code> object, then calling its <code>comments()</code> method, like this:
 <pre>
    $entry = new Entry(array(xid => '6a00e5539faa3b88330120a7b01470970b'));
    $comments = $entry->comments();
@@ -72,6 +72,32 @@ but this will result in two API calls when you really just need to make one.  Th
    $comments = $comment_listing->comments();
 </pre>
 <p>You can see an example of a post's comment listing in <a href="entry_comments_example.php">entry_comments_example.php</a>.</p>
+
+
+<h3>Reblogging a Post</h3>
+<p>TBD</p>
+
+<h3>Displaying Reblog Data about a Post</h3>
+<p>TBD</p>
+
+<h3>Uploading Photos </h3>
+<p>TBD</p>
+
+<h3>Favoriting an Entry</h3>
+<p>TBD</p>
+
+<h3>Retrieving Favorites from a Post </h3>
+<p>Similar to the <code>$entry->comments()</code> method as a wrapper for constructing a <code>TPCommentListing</code> object, you can also create a listing of Favorites in the same two ways:
+<pre>
+      $entry = new Entry(array(xid => '6a00e5539faa3b88330120a7b01470970b'));
+      $favorites = $entry->favorites();
+</pre>
+but this will result in two distinct API calls -- one to retrieve the Entry data, and the other to retrieve the Favorites listing. If you don't need the Entry's data, make one call with <code>FavoriteListing</code>:
+<pre>
+      $favorite_listing = new FavoriteListing(array(xid => '6a00e5539faa3b88330120a7b01470970b'));
+      $favorites = $favorite_listing->favorites();
+</pre>
+An example of the Favorites listing can be viewed here: <a href="entry_favorites_example.php">entry_favorites_example.php</a>.</p>
 </body>
 </html>
       

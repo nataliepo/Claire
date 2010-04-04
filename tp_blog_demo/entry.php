@@ -11,7 +11,7 @@
                     $post_xid = $_GET['xid'];
             }
             
-            $entry = new Entry($post_xid);
+            $entry = new Entry(array(xid => $post_xid));
             $favorites = $entry->favorites();
 //            $braided_comments = $entry->braided_comments();
 //            $braided_comments = $entry->comments();
