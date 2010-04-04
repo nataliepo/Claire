@@ -26,7 +26,7 @@
 </head>
 
 <body>
-   <h2>TypePad Loves You!</h2>
+   <h2><a href="index.php">TypePad Loves You!</a></h2>
 <?php
    
    if (!$user_session->is_logged_in()) {      

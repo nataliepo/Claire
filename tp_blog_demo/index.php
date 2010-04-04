@@ -13,8 +13,8 @@
       }
             
 //      $entry_listing = new EntryListing($page_number);
-      $entry_listing = new EntryListing(array(xid => BLOG_XID, 
-                                              page_number => $page_number));
+      $entry_listing = new EntryListing(array('xid' => BLOG_XID, 
+                                              'page_number' => $page_number));
       
       $entries = $entry_listing->entries();
    ?>

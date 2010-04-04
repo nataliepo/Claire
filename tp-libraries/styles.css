@@ -64,7 +64,9 @@ a.prev {
 
 .favorites {
    width: 400px;
+/*
    border:1px solid #ccc;
+*/
    float: right;
 }
 
@@ -117,4 +119,9 @@ ul {
 
 #dark {
    background-color: #666666;
+}
+
+.buttons li {
+   display: inline;
+   list-style-type: none;
 }

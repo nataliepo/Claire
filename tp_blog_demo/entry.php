@@ -11,12 +11,9 @@
                     $post_xid = $_GET['xid'];
             }
             
-            $entry = new Entry(array(xid => $post_xid));
+            $entry = new Entry(array('xid' => $post_xid));
             $favorites = $entry->favorites();
-//            $braided_comments = $entry->braided_comments();
-//            $braided_comments = $entry->comments();
-            $comments = $entry->rousseaus_listing();
-
+            $comments = $entry->comments();
          ?>
          
          <title>Claire: <?php echo $entry->title; ?></title>
@@ -46,19 +43,27 @@
         
         <div class="favorites">
            <h5>Favorites</h5>
-          
+          <ul class="buttons">
        <?php 
+            $i = 1;
+            $row = 5;
             foreach ($favorites as $favorite) {
                echo '
-            <div class="favorite-avatar">
-               <a href="' . $favorite->author->profile_url . '">
-                  <img class="avatar" src="' . $favorite->author->avatar . '" />
-               </a>
-               <a href="' . $favorite->author->profile_url . '">' . $favorite->author->display_name .
+            <li>' . 
+            // '<div class="favorite-avatar">' . 
+               '<a href="' . $favorite->author->profile_url . '"><img class="avatar" src="' . $favorite->author->avatar . '" /></a>';
+               
+            if (($i % $row) == 0) {
+               echo "<br />";
+            }
+            $i++;
+            echo '</li>';
+      /*         '<a href="' . $favorite->author->profile_url . '">' . $favorite->author->display_name .
                '</a> favorited this entry on ' . $favorite->time() . '.
-            </div>';
+            </div>'; */
             }
         ?> 
+        </ul>
            
         </div>
         
@@ -66,8 +71,8 @@
            <h5>Comments</h5>
 
               <?php
-/*
-                 foreach ($braided_comments as $comment) {
+
+                 foreach ($comments as $comment) {
                     echo '
             <div class="comment-outer">
                <div class="comment-avatar">
@@ -79,8 +84,6 @@
                </div>
             </div>';                  
                  }  
-*/
-                 echo $comments;
                  
               ?>
         </div>
