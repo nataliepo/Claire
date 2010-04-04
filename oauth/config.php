@@ -1,6 +1,6 @@
 <?php
 
-   define ("DEFAULT_DEBUG_MODE", 0);
+   define ("DEFAULT_DEBUG_MODE", 1);
 
 
    define ("BLOG_XID", "0");    
