@@ -2,47 +2,58 @@
     include_once('tp-utilities.php');
     
     
-    /**********
-     * Comment objects are agnostic of platform.  They can be
-     * TypePad, FB, or another type of comment, but they always have:
-     *    $author, which is an Author object (defined in tp-author.php)
-     *    $content, which is just a string that represents the comment.
-     *    $xid is the TP Entry's XID if this is a TP Comment.
-     *    $timestamp is the date/time of the comment's posting
-     ***************************/
-    class Comment {
-       var $author;
-       var $content;
-       var $xid;
-       var $timestamp;
+/**********
+* Comment objects are agnostic of platform.  They can be
+* TypePad, FB, or another type of comment, but they always have:
+*    $author, which is an Author object (defined in tp-author.php)
+*    $content, which is just a string that represents the comment.
+*    $xid is the TP Entry's XID if this is a TP Comment.
+*    $timestamp is the date/time of the comment's posting
+***************************/
+class Comment {
+   var $author;
+   var $content;
+   var $xid;
+   var $timestamp;
 
-       // contructor
-       //  TWO INPUT TYPES: a JSON entry object, or an XID.
-       // passing a JSON object reduces the number of requests.
-       // passing an XID makes another request to get lots of information.
-       function Comment($xid = 0, $comment_json = '') {
+   function Comment($params) {
 
-          // Allow creation of a Comment shell to allow other Commenting Services
-          // to take on its form.
-          if (!$xid) {
-             return;
-          }
+      // this is a POST request.
+      if (array_key_exists('post_xid', $params) &&
+          array_key_exists('content',  $params)) {
 
-          if (!$comment_json) {
-             $comment_json = pull_json(get_entry_api_url($xid));
-          }
+         if (array_key_exists('session', $params)) {
+            $this->post_authenticated_comment($params);
+         }
+         else {
+            debug ("Creation of new UnAuthenticated Comment...");
+         }
+            
+         return;
+      }
 
-          $this->author = new Author(array('xid' => $comment_json->author->urlId,        
-                                           'json' => $comment_json->author));
-          $this->content = $comment_json->content;
-          $this->xid = $comment_json->urlId;
+      // Allow creation of a Comment shell to allow other Commenting Services
+      // to take on its form.
+      if (!array_key_exists('xid', $params) &&
+          !array_key_exists('json', $params)) {
+         return;
+      }
+
+      if (!array_key_exists('json', $params)) {
+         $params['json'] = pull_json(get_entry_api_url($params['xid']));
+      }
+
+      $this->author = new Author(array('xid' => $params['json']->author->urlId,        
+                                       'json' => $params['json']->author));
+      $this->content = $params['json']->content;
+      $this->xid = $params['json']->urlId;
 
 /*          $datetime =  new DateTime($comment_json->published);
           debug ("Timestamp would have been: " . $datetime->format('F d, Y g:ia'));
 */
-         // FOR PHP 5.1.6 COMPATIBILITY.
-          $this->timestamp = new TPDate($comment_json->published);
-       }
+      // FOR PHP 5.1.6 COMPATIBILITY.
+      $this->timestamp = new TPDate($params['json']->published);
+   }
 
        function get_content () {
           return $this->content;
@@ -51,24 +62,23 @@
        function time() {
           return $this->timestamp->print_readable_time();
        }
+       
+       function post_authenticated_comment ($params) {
+          $typepad_url = get_comments_api_url ($params['post_xid'], 1);
+          
+          $session = $params['session'];
+          $json = '{"content":"' . $params['content'] . '"}';
+          $response = $session->make_authorized_request($typepad_url, $json);
+          
+       }
     }
 
 class TPCommentListing {
    var $post_xid;
    var $comment_array;
 
-   function build_comment_listing ($xid) {
-      $events = pull_json(get_comments_api_url($xid));
-
-      $i = 0;    
-      foreach($events->{'entries'} as $comment) {
-         $this->comment_array[$i] = new Comment($comment->urlId, $comment);
-         $i++;
-      }
-   }
       
    // contructor - expects the XID of the entry.
-//   function TPCommentListing($post_xid = "") {
    function TPCommentListing($params) {
       if (!array_key_exists('xid', $params)) {
          debug ("[TPCommentListing::TPCommentListing] Expected parameter 'xid' in the constructor.");
@@ -77,7 +87,15 @@ class TPCommentListing {
       
       $this->post_xid = $params['xid'];
       $this->comment_listing = array();
-      $this->build_comment_listing($params['xid']);
+      
+      $events = pull_json(get_comments_api_url($params['xid']));
+
+      $i = 0;    
+      foreach($events->{'entries'} as $comment) {
+         $this->comment_array[$i] = new Comment(array('xid'  => $comment->urlId, 
+                                                      'json' => $comment));
+         $i++;
+      }
    }
      
    function get_post_xid() {

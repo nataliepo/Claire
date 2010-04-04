@@ -85,8 +85,16 @@ function get_entry_api_url ($xid) {
    return ROOT_TYPEPAD_API_URL . '/assets/' . $xid . '.json';
 }
 
-function get_comments_api_url ($xid) {
-     return ROOT_TYPEPAD_API_URL . '/assets/' . $xid . '/comments.json';
+function get_comments_api_url ($xid, $is_auth=0) {
+   $root = "";
+    if ($is_auth) {
+       $root = ROOT_TYPEPAD_AUTH_API_URL;
+    }
+    else {
+       $root = ROOT_TYPEPAD_API_URL;
+    }   
+    
+    return $root . '/assets/' . $xid . '/comments.json';
 }
 
 function get_favorites_api_url ($xid) {

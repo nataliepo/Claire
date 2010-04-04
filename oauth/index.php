@@ -4,8 +4,6 @@
    include_once ("oauth-php-98/library/OAuthRequester.php");
 
    include_once('config.php'); 
-   
-   $author = "";
 
    //----------------------
    // The TPSession constructor is handling a lot of session-housekeeping:

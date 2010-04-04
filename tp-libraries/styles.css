@@ -29,9 +29,23 @@ a.prev {
    float: left;
 }
 
+
+.login_box {
+   float: right;
+   text-align: right;
+}
+
+/*
+.login_box p a{
+   float:right;
+   text-align:right;
+}*/
+
 .comments {
    width: 400px;
+/*
    border:1px solid #ccc;
+*/
 }
 
 .comment-outer {
@@ -59,7 +73,7 @@ a.prev {
 }
 
 .entry-body {
-   width: 600px;
+   width: 650px;
    float: center;
    font-size: 10pt;
    border:1px solid #ccc;

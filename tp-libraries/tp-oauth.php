@@ -28,6 +28,8 @@ class TPSession {
       // determine who this user is (from this site's cookie alone)
       $this->user_id = get_user_id(COOKIE_NAME);
 
+//      debug ("This user's cookie is " . $this->user_id);
+      
       // If there's no user_id in the cookie, then there's no session -- not logged in.
       if (!$this->user_id) {
          return 0;
@@ -38,7 +40,7 @@ class TPSession {
       //   2. the Database -- if the user already completed the OAuth dance.
       $this->oauth_token = get_oauth_token(COOKIE_NAME, $_GET, $this->store);
 
-      debug ("OAUTH TOKEN = " . $this->oauth_token);
+//      debug ("OAUTH TOKEN = " . $this->oauth_token);
 
       // Somebody wanted to log out!  You should let them.
       if (array_key_exists('logout', $_GET)) {
@@ -49,20 +51,15 @@ class TPSession {
       // to verify it.  This call will also update $this->oauth_token.
       else if (array_key_exists('oauth_verifier', $_GET)) {
          $this->verify_access_token();
-         
-         // Also update the local author record if all goes well...
-         if ($this->is_logged_in()) {
-            $this->update_author_record();
-         }
+      }
+      
+      // Also update the local author record if all goes well...
+      if (!$this->author and $this->is_logged_in()) {
+         $this->update_author_record();
       }
    } 
-    
-   function update_author_record() {
-      $typepad_url = 'https://api.typepad.com/users/@self.json';
-      //$typepad_url = 'https://api.typepad.com/users/6p00e5539faa3b8833.json';
-      // Throw the extra 1 as a parameter since this is an authorized request.
-      $typepad_url = get_author_api_url ('@self', 1);
-
+   
+   function make_authorized_request($url, $params="") {
       // Make a dummy OAuth Request object so we can use its signed parameters
       $oauth 	= new OAuthRequester($this->get_api_endpoint('oauth-access-token-endpoint'), 'GET');
 
@@ -93,23 +90,36 @@ class TPSession {
       $header_array = array('Authorization:' . $header_string,
                             'Content-Type: application/json;'); 
                             
-//      debug ("[update_author_record] Making the request at url = $typepad_url with Authorization: $header_string");
+//      debug ("[update_author_record] Making the request at url = $url with Authorization: $header_string");
 
-      $ch = curl_init($typepad_url);   
+      $ch = curl_init($url);   
       curl_setopt($ch, CURLOPT_RETURNTRANSFER,  true);
       curl_setopt($ch, CURLOPT_HTTPHEADER,      $header_array);
       curl_setopt($ch, CURLOPT_FOLLOWLOCATION,  1);
       curl_setopt($ch, CURLOPT_HEADER,          false); 
+      if ($params) {
+         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+      }
 
       $response = claire_json_decode(curl_exec($ch));
-      curl_close($ch);
+      curl_close($ch);      
+      
+      return $response;
+   }
+    
+   function update_author_record() {
+
+      // Throw the extra 1 as a parameter since this is an authorized request.
+      $typepad_url = get_author_api_url ('@self', 1);
+      
+      $response = $this->make_authorized_request($typepad_url);
 
       $this->author = new Author(array('json' => $response));
 
       // this writes the Author record to the db.
       $oauth_user_id = remember_author($this->author);
 
-      debug ("[final_request] This author's id is $oauth_user_id");
+//      debug ("[final_request] This author's id is $oauth_user_id");
 
       // Also create a cookie out of this author.
       setcookie(COOKIE_NAME, $oauth_user_id);
@@ -207,7 +217,7 @@ class TPSession {
       // don't forget the verifier!
       $final_url .= 'oauth_verifier=' . $_GET['oauth_verifier'];
 
-      debug ("FINAL URL = $final_url");
+//      debug ("FINAL URL = $final_url");
 
       /********
       * THIS GENERATES ERRORS IN PHP 5.1.X
@@ -272,10 +282,6 @@ class TPSession {
       // is NOT logged in.
       $this->oauth_token = "";
    }
-
-   function grab_author_information() {
-      
-   }
    
    // This is a wrapper method for the first Login page of the OAuth process, and does the following:
    //  1. Formulates a request to TypePad for a Request Token 
@@ -315,7 +321,7 @@ class TPSession {
       foreach ($servers as $server_item) {
          if (($server_item['consumer_key'] == CONSUMER_KEY) &&
              ($server_item['user_id'] == $this->user_id)) {
-            debug ("User_id = " . $this->user_id);
+//            debug ("User_id = " . $this->user_id);
             $this->store->deleteServer(CONSUMER_KEY, $this->user_id);
          }
       }
@@ -363,13 +369,13 @@ class TPSession {
                oauth_signature_method=HMAC-SHA1
       */
             
-      debug ("Final Url = $final_url");
+//      debug ("Final Url = $final_url");
       // and go ahead and execute the request.
       $handle = fopen($final_url, "rb");
       $doc = stream_get_contents($handle);     
       $response_array = explode("&", $doc);
 
-      debug ("Response from request = ^" . var_dump($response_array));
+//      debug ("Response from request = ^" . var_dump($response_array));
       
       // TODO: Verbose error handling
 
@@ -385,7 +391,7 @@ class TPSession {
                                           $response['oauth_token_secret'], $this->user_id, '');
 
       var_dump($oauth);
-      debug ("After creating a simple request token, store obj = ^ ");      
+//      debug ("After creating a simple request token, store obj = ^ ");      
       
       $this->oauth_token = $response['oauth_token'];     
    }
