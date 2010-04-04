@@ -28,9 +28,9 @@
       $blog_xid = "6a00e5539faa3b88330120a7aa0fdb970b";
       $posts_per_page = 5;
       
-      $blog_entry_listing = new EntryListing(array(xid => $blog_xid,
-                                                   page_number => $page_number,
-                                                   posts_per_page => $posts_per_page));
+      $blog_entry_listing = new EntryListing(array('xid' => $blog_xid,
+                                                   'page_number' => $page_number,
+                                                   'posts_per_page' => $posts_per_page));
                                                    
       echo "<ul>";
       $entries_array = $blog_entry_listing->entries();

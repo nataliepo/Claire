@@ -26,7 +26,7 @@
       $entry = new Entry(array(xid => $entry_xid));                                             
       $comments = $entry->comments();
       */
-      $comment_listing = new TPCommentListing(array(xid => $entry_xid));
+      $comment_listing = new TPCommentListing(array('xid' => $entry_xid));
       $comments = $comment_listing->comments();
       
       echo "<ul>";

@@ -32,8 +32,8 @@
              $comment_json = pull_json(get_entry_api_url($xid));
           }
 
-          $this->author = new Author(array(xid => $comment_json->author->urlId,        
-                                           json => $comment_json->author));
+          $this->author = new Author(array('xid' => $comment_json->author->urlId,        
+                                           'json' => $comment_json->author));
           $this->content = $comment_json->content;
           $this->xid = $comment_json->urlId;
 

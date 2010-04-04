@@ -21,8 +21,8 @@ class FavoriteListing {
       $i = 0;    
 
       foreach($events->{'entries'} as $favorite) {
-         $this->favorite_array[$i] = new Favorite(array(xid  => $favorite->urlId, 
-                                                        json => $favorite));
+         $this->favorite_array[$i] = new Favorite(array('xid'  => $favorite->urlId, 
+                                                        'json' => $favorite));
          $i++;
       }
    }    
@@ -64,7 +64,7 @@ class Favorite {
          $params['json'] = pull_json(get_favorite_api_url($params['xid']));
       }
 
-      $this->author = new Author(array(json => $params['json']->author));
+      $this->author = new Author(array('json' => $params['json']->author));
                                        
       $this->xid = $params['json']->urlId;
       

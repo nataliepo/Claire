@@ -5,16 +5,14 @@
       
       include_once('config.php'); 
       
-   
-      $db_options = array('server' => 'localhost',
-                          'username' => 'rocky',
-                          'password' => 'four',
-                          'database' => 'oauth_test');
+      $db_options = array('server'     => DB_HOST,
+                          'username'   => DB_USERNAME,
+                          'password'   => DB_PASSWORD,
+                          'database'   => DB_NAME);
 
       $store   = OAuthStore::instance('MySQL', $db_options);      
       
       /* There should be nothing written to the DB at this point. */
-
 
       /* 
          Then, make the request to TypePad to get the necessary OAuth URlS. 
@@ -97,13 +95,11 @@
 		
 		// This creates a generic Request object.
       $oauth 	= new OAuthRequester($endpoint_strs['oauth-request-token-endpoint'], '', '');
-//		$oauth->setParam('oauth_callback', 'http://127.0.0.1/claire/oauth/beta.php');
 		$oauth->setParam('oauth_callback', CALLBACK_URL);
 
       // ..and this adds more parameters, like the timestamp, nonce, version, signature method, etc
       $oauth->sign($user_id, $r);
       
-//      $final_url = "https://www.typepad.com/secure/services/oauth/request_token?";
       $final_url = $endpoint_strs['oauth-request-token-endpoint'] . "?";
 
       $parameters = array('timestamp', 'callback', 'nonce', 'consumer_key', 

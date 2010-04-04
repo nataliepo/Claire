@@ -45,7 +45,7 @@ class Author {
       
       // At this point, we should have valid JSON.
        
-       $this->xid = $author_json->urlId;
+       $this->xid = $params['json']->urlId;
        $this->display_name = $params['json']->displayName;
        $this->profile_url = $params['json']->profilePageUrl;
        $this->username = $params['json']->preferredUsername;

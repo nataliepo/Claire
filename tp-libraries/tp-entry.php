@@ -113,8 +113,8 @@ class Entry {
        $this->thumbnail = get_first_thumbnail($params['json']->embeddedImageLinks);
        $this->xid = $params['json']->urlId;
        
-       $this->author = new Author(array(xid  => $params['json']->author->urlId,
-                                        json => $params['json']->author ));
+       $this->author = new Author(array('xid'  => $params['json']->author->urlId,
+                                        'json' => $params['json']->author ));
 
        // GETTING RID OF DateTime for PHP 5.1.6 compatibility
 //       $date =  new DateTime($entry_json->published);
@@ -136,11 +136,11 @@ class Entry {
     }
     
     function build_comment_listing () {
-       $this->comment_listing = new TPCommentListing(array(xid => $this->xid));
+       $this->comment_listing = new TPCommentListing(array('xid' => $this->xid));
     }
     
     function build_favorite_listing() {
-       $this->favorite_listing = new FavoriteListing(array(xid => $this->xid));
+       $this->favorite_listing = new FavoriteListing(array('xid' => $this->xid));
     }
     
     function build_fb_comment_listing() {

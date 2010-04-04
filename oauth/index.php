@@ -7,11 +7,10 @@
    
    $author = "";
 
-  
-   $db_options = array('server' => 'localhost',
-                       'username' => 'rocky',
-                       'password' => 'four',
-                       'database' => 'oauth_test');
+   $db_options = array('server'     => DB_HOST,
+                       'username'   => DB_USERNAME,
+                       'password'   => DB_PASSWORD,
+                       'database'   => DB_NAME);
 
 
 
@@ -212,7 +211,7 @@
       $response = json_decode(curl_exec($ch));
       curl_close($ch);
 
-      $author = new Author(1, $response);
+      $author = new Author(array(xid => 1, json => $response));
       
       debug ("[index.php] calling remember_author()");
       $oauth_user_id = remember_author($author);
@@ -282,7 +281,7 @@
          preg_match($pattern, $user['user_tp_xid'], $matches);
 
          if (sizeof($matches) > 0) {
-            $author = new Author($user['user_tp_xid']);
+            $author = new Author(array('xid' => $user['user_tp_xid']));
             echo "<li><img src='" . $author->avatar . "' /> " . 
                      "<a href='" . $author->profile_url . "'>". $author->display_name . "</a></li>";
          }

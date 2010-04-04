@@ -21,7 +21,7 @@
       $authors = array('nataliepo', 'mmmeow', 'nywbc', 'wtfbklyn', 'capndesign');
       
       foreach ($authors as $author_str) {
-         $a = new Author(array(username => $author_str));
+         $a = new Author(array('username' => $author_str));
          echo "<li><img src='" . $a->avatar . "' /> " . 
             "<a href='" . $a->profile_url . "'>". 
             $a->display_name . "</a></li>";

@@ -25,7 +25,7 @@
       $entry = new Entry(array(xid => $entry_xid));                                             
       $favorites = $entry->favorites();
       */
-      $favorites_listing = new FavoriteListing(array(xid => $entry_xid));
+      $favorites_listing = new FavoriteListing(array('xid' => $entry_xid));
       $favorites = $favorites_listing->favorites();
       
       echo "<ul>";

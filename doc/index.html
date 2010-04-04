@@ -18,14 +18,14 @@
    <p>You can create an <code>Author</code> object (defined in <code>tp-libraries/tp-author.php</code>) in the following ways:
 <pre>      
       // by profile alias (aka username)
-      $a = new Author(array(username => 'nataliepo'));
+      $a = new Author(array('username' => 'nataliepo'));
       
       // by XID
-      $a = new Author(array(xid => '6p00e5539faa3b8833'));
+      $a = new Author(array('xid' => '6p00e5539faa3b8833'));
       
       // with an "author" block of json, which is included
       // in a post, comment, and favorite request.
-      $a = new Author(array(json => $favorite_json->author));
+      $a = new Author(array('json' => $favorite_json->author));
 </pre>
 <p>If you create an <code>Author</code> object with an <code>XID</code> or <code>username</code> that TypePad cannot locate, the <code>Author</code> constructor will print a message to STDOUT when <code>DEFAULT_DEBUG_MODE</code> is turned on.</p>
 
@@ -41,9 +41,9 @@
 <p>The <code>EntryListing</code> object (defined in <code>tp-libraries/tp-blog.php</code>) creates a listing of <code>Entry</code> objects in a particular blog:
 <pre>
       // Creates a new listing for the Hobbitted blog XID.
-      $blog_entry_listing = new EntryListing(array(xid => "6a00e5539faa3b88330120a7aa0fdb970b",
-                                                   page_number => $page_number,
-                                                   posts_per_page => 5));
+      $blog_entry_listing = new EntryListing(array('xid' => "6a00e5539faa3b88330120a7aa0fdb970b",
+                                                   'page_number' => $page_number,
+                                                   'posts_per_page' => 5));
                                                    
       // Then, loop over the entries in the blog..
       $entries_array = $blog_entry_listing->entries();
@@ -63,12 +63,12 @@
 <h3>Retrieving Comments from a Post </h3>
 <p>You can grab a post's comment listing by first creating a <code>Entry</code> object, then calling its <code>comments()</code> method, like this:
 <pre>
-   $entry = new Entry(array(xid => '6a00e5539faa3b88330120a7b01470970b'));
+   $entry = new Entry(array('xid' => '6a00e5539faa3b88330120a7b01470970b'));
    $comments = $entry->comments();
 </pre>
 but this will result in two API calls when you really just need to make one.  That's what the <code>TPCommentListing</code> object was created for, since it's not storing all of the <code>Entry</code>'s additional fields:
 <pre>
-   $comment_listing = new TPCommentListing(array(xid => '6a00e5539faa3b88330120a7b01470970b'));
+   $comment_listing = new TPCommentListing(array('xid' => '6a00e5539faa3b88330120a7b01470970b'));
    $comments = $comment_listing->comments();
 </pre>
 <p>You can see an example of a post's comment listing in <a href="entry_comments_example.php">entry_comments_example.php</a>.</p>
@@ -89,12 +89,12 @@ but this will result in two API calls when you really just need to make one.  Th
 <h3>Retrieving Favorites from a Post </h3>
 <p>Similar to the <code>$entry->comments()</code> method as a wrapper for constructing a <code>TPCommentListing</code> object, you can also create a listing of Favorites in the same two ways:
 <pre>
-      $entry = new Entry(array(xid => '6a00e5539faa3b88330120a7b01470970b'));
+      $entry = new Entry(array('xid' => '6a00e5539faa3b88330120a7b01470970b'));
       $favorites = $entry->favorites();
 </pre>
 but this will result in two distinct API calls -- one to retrieve the Entry data, and the other to retrieve the Favorites listing. If you don't need the Entry's data, make one call with <code>FavoriteListing</code>:
 <pre>
-      $favorite_listing = new FavoriteListing(array(xid => '6a00e5539faa3b88330120a7b01470970b'));
+      $favorite_listing = new FavoriteListing(array('xid' => '6a00e5539faa3b88330120a7b01470970b'));
       $favorites = $favorite_listing->favorites();
 </pre>
 An example of the Favorites listing can be viewed here: <a href="entry_favorites_example.php">entry_favorites_example.php</a>.</p>

@@ -30,8 +30,8 @@ class EntryListing {
          
       $i = 0;    
       foreach($events->{'entries'} as $entry) {
-          $this->entry_array[$i] = new Entry(array(xid => $entry->urlId, 
-                                                   json => $entry));
+          $this->entry_array[$i] = new Entry(array('xid' => $entry->urlId, 
+                                                   'json' => $entry));
           $i++;
       }
          
