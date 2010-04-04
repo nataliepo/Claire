@@ -15,9 +15,10 @@
       | user_name   | mediumtext  | YES  |     | NULL    |                |
       +-------------+-------------+------+-----+---------+----------------+
       3 rows in set (0.01 sec)
-   
-- Schema sanity check: you should have all of these tables;
+      
 
+- Schema sanity check -- you should have all of these tables: 
+      
       mysql> show tables;
       +-------------------------+
       | Tables_in_oauth_test    |
