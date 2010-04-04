@@ -19,51 +19,51 @@
 
 - Schema sanity check -- you should have all of these tables: 
       
-      mysql> show tables;
-      +-------------------------+
-      | Tables_in_oauth_test    |
-      +-------------------------+
-      | oauth_consumer_registry |
-      | oauth_consumer_token    | 
-      | oauth_log               | 
-      | oauth_server_nonce      | 
-      | oauth_server_registry   | 
-      | oauth_server_token      | 
-      | users                   | 
-      +-------------------------+
-      7 rows in set (0.00 sec)
+        mysql> show tables;
+        +-------------------------+
+        | Tables_in_oauth_test    |
+        +-------------------------+
+        | oauth_consumer_registry |
+        | oauth_consumer_token    | 
+        | oauth_log               | 
+        | oauth_server_nonce      | 
+        | oauth_server_registry   | 
+        | oauth_server_token      | 
+        | users                   | 
+        +-------------------------+
+        7 rows in set (0.00 sec)
    
 - Modify the definition of the OAuth lib's consumer token to support a very long oauth_token value.  TypePad's is longer than what this library gives you by default.
 
-      mysql> alter table oauth_consumer_token change oct_token oct_token varchar(170);
+        mysql> alter table oauth_consumer_token change oct_token oct_token varchar(170);
    
 - Create a config.php file (if it doesn't already exist), and fill in the following required constants:
 
-      // whatever you'd like to name your local cookie, which will hold the ID (not XID) of 
-      // each user's session on your site
-      define ('COOKIE_NAME', 'claire-comment-cookie');
-      
-      // Apply for API keys on http://www.typepad.com/account/access/developer. 
-      // These values should be the first two listed under your app's dev keys
-      define ('CONSUMER_KEY', 'this comes from typepad');
-      define ('CONSUMER_SECRET', 'this comes from typepad');
-      
-      // This is the CallBack URL in your OAuth dance, which is usually index.php for me.
-      define ('CALLBACK_URL', 'http://127.0.0.1/claire/posting_comments/index.php');
-      
-      // DB connectivity information
-      define ('DB_HOST', 'localhost');
-      define ('DB_USERNAME', 'user');
-      define ('DB_PASSWORD', 'pwd');
-      define ('DB_NAME', 'db_name');
-      
-      // include the tp-libraries/ lib relatively so you only have to include
-      // this config.php in your client files
-      include_once('../tp-libraries/tp-utilities.php');
+        // whatever you'd like to name your local cookie, which will hold the ID (not XID) of 
+        // each user's session on your site
+        define ('COOKIE_NAME', 'claire-comment-cookie');
+        
+        // Apply for API keys on http://www.typepad.com/account/access/developer. 
+        // These values should be the first two listed under your app's dev keys
+        define ('CONSUMER_KEY', 'this comes from typepad');
+        define ('CONSUMER_SECRET', 'this comes from typepad');
+        
+        // This is the CallBack URL in your OAuth dance, which is usually index.php for me.
+        define ('CALLBACK_URL', 'http://127.0.0.1/claire/posting_comments/index.php');
+        
+        // DB connectivity information
+        define ('DB_HOST', 'localhost');
+        define ('DB_USERNAME', 'user');
+        define ('DB_PASSWORD', 'pwd');
+        define ('DB_NAME', 'db_name');
+        
+        // include the tp-libraries/ lib relatively so you only have to include
+        // this config.php in your client files
+        include_once('../tp-libraries/tp-utilities.php');
 
-- Turn DEFAULT_DEBUG_MODE:
-      define ("DEFAULT_DEBUG_MODE", 1);
-This will output the API requests and surface additional error info during development.
+- Turn on DEFAULT_DEBUG_MODE to output the API requests and surface additional error info during development.
+        define ("DEFAULT_DEBUG_MODE", 1);
+
 
 
 
