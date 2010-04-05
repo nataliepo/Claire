@@ -58,7 +58,30 @@
 <p>TBD</p>
 
 <h3>Posting a Comment</h3>
-<p>TBD</p>
+<p>You can post comments in one of two ways: authenticated or anonymously.  NOTE: In order for the <code>TPSession</code> object to work, you'll need to set up session-keeping databases outlined in the <a href="../oauth/README.md">OAuth README</a>.  Otherwise, you'll only be able to post anonymous comments.</p>
+
+<h4>Authenticated Comments</h4>
+<pre>
+   &lt;?php 
+      // create a session
+      $user_session = new TPSession();
+      
+      // if the user is logged in, post a comment as an Authenticated request:
+      if ($user_session->is_logged_in()) {
+         $comment = new Comment(array('post_xid' => $post_xid,
+                                      'session' => $user_session,
+                                      'content' => $_POST['comment_text']));
+      }
+   ?&gt;
+      
+
+      &lt;!-- be sure to define a form that can post comments!  --&gt;
+      &lt;h3&gt;Post a Comment!&lt;/h3&gt;
+      &lt;form action="entry.php" method="post"&gt;
+         &lt;textarea name="comment_text" cols="40" rows="6"&gt;&lt;/textarea&gt;
+         &lt;input type="submit" value="send"&gt;
+      &lt;/form&gt;
+</pre>
 
 <h3>Retrieving Comments from a Post </h3>
 <p>You can grab a post's comment listing by first creating a <code>Entry</code> object, then calling its <code>comments()</code> method, like this:

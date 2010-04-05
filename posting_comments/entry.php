@@ -17,12 +17,20 @@
             
             
             // handle comment posts...
-            if ($user_session->is_logged_in() and
-               array_key_exists('comment_text', $_POST)) {
-                  // This will post a comment to TypePad.
-                  $comment = new Comment(array('post_xid' => $post_xid,
-                                               'session'   => $user_session,
-                                               'content'  => $_POST['comment_text']));
+            if (array_key_exists('comment_text', $_POST)) {
+                 if ($user_session->is_logged_in()) {
+                   // This will post a comment to TypePad -- while Authenticated.
+                   $comment = new Comment(array('post_xid' => $post_xid,
+                                                'session'  => $user_session,
+                                                'content'  => $_POST['comment_text']));
+                 }
+                 else {
+                    // Post anonymously.
+                    $comment = new Comment(array('post_xid' => $post_xid,
+                                                 'content'  => $_POST['comment_text'], 
+                                                 'name'     => $_POST['comment_name'],
+                                                 'href'     => $_POST['comment_href']));
+                 }
             }
      
             
@@ -91,16 +99,23 @@
                         
       <?php
          if (!$user_session->is_logged_in()) {      
-            echo "<h3><a href='login.php'>Sign In</a> to Comment</h3>";
+            echo "<h3><a href='login.php'>Sign In</a> or Comment Anonymously</h3>";
          }
          else {
             echo "<h3>Leave a Comment, <a href='" . $user_session->author->profile_url . "'>" . 
                $user_session->author->display_name . "</a>!</h3>";
       ?>
-      
       <!-- comment form -->
       <form action="entry.php" method="post">
          <input type="hidden" name="xid" value="<?php echo $post_xid; ?>">
+         <?php
+            if (!$user_session->is_logged_in()) {
+               echo '<label>Your Name: </label> <input type="text" name="comment_name" /><br />';
+               echo '<label>Your Website: </label> <input type="text" name="comment_href" /><br />';
+            }
+         
+         ?>
+
          <textarea name="comment_text" cols="40" rows="6"></textarea>
          <br />
          <input type="submit" value="send">
