@@ -15,20 +15,38 @@ class TPConnectEntry {
    
    var $content;
    
-   function TPConnectEntry ($blog_xid, $permalink, $entry_id, $content) {
-      $this->entry_id = $entry_id;
-
-      $json = '{"permalinkUrl":"' . $permalink . '"}';
-      $post_url = get_tpconnect_external_assets_api_url($blog_xid);
-      # First, get the 
-//      $events = post_json($post_url, $json);
-
-//      $this->xid = $events->asset->urlId;
+   function TPConnectEntry($params) {
+      if (!array_key_exists('post_xid', $params)) {
+         if ((!array_key_exists('blog_xid',  $params)) && 
+             (!array_key_exists('permalink', $params))) {
+            debug ("[TPConnectEntry::TPConnectEntry] Either a post_xid OR blog_xid and permalink are required.");
+         }
+      }
+      
+      if (array_key_exists('entry_id', $params)) {
+         $this->entry_id = $params['entry_id'];
+      }
+      
+      if (array_key_exists('content', $params)) {
+         $this->content = $params['content'];
+      }
+      
+      if (array_key_exists('permalink', $params)) {
+         $this->permalink = $params['permalink'];
+      }
+      
+      if ((array_key_exists('permalink', $params)) &&
+          (array_key_exists('blog_xid', $params))){
+         $json = '{"permalinkUrl":"' . $params['permalink'] . '"}';
+         $post_url = get_tpconnect_external_assets_api_url($params['blog_xid']);
+         $events = post_json($post_url, $json);
+         
+         $this->blog_xid = $params['blog_xid'];
+         $this->xid = $events->asset->urlId;
+      }
       
       $this->tp_comment_listing = array();
-      $this->blog_xid = $blog_xid;
-      $this->permalink = $permalink;
-      $this->content = $content;
+
    }
    
    function comments() {

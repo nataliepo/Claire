@@ -193,8 +193,6 @@ function post_json ($url, $params) {
 
    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
           "Content-Type: application/json;"));
-
-   debug ("[post_json] PHP VERSION = " . phpversion());
    
    return json_decode(curl_exec($ch));
 }
