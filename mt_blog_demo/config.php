@@ -10,7 +10,7 @@
     define ("BLOG_XID", "6a00e5539faa3b88330120a94362b9970b");
 
 // LOCALHOST SETTINGS
-/*    
+
     define ('CONSUMER_KEY', '67738f8572da988f');
     define ('CONSUMER_SECRET', 'BHi2Kre5');
     define ('CALLBACK_URL', 'http://127.0.0.1/claire/mt_blog_demo/performance_artist.php');
@@ -21,10 +21,10 @@
     define ('DB_NAME', 'posting_comments');
 
     define ('COOKIE_NAME', 'claire-comment-posting');
-*/
+
 
 // DEV3 SETTINGS
-
+/*
    define ('COOKIE_NAME', 'claire-session');
 
    define ('CONSUMER_KEY', '0ad999b15fb10bef');
@@ -35,6 +35,9 @@
    define ('DB_USERNAME', 'rocky');
    define ('DB_PASSWORD', 'four');
    define ('DB_NAME', 'oauth_test');
+*/
+
+
 
     include_once('../tp-libraries/tp-utilities.php'); 
     

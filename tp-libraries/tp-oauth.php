@@ -25,8 +25,10 @@ class TPSession {
          $this->store   = OAuthStore::instance('MySQL', get_db_options());     
       }
 
+
       // determine who this user is (from this site's cookie alone)
       $this->user_id = get_user_id(COOKIE_NAME);
+      debug ("[TPSession::TPSesssion], user_id = " . $this->user_id);
 
 //      debug ("This user's cookie is " . $this->user_id);
       
