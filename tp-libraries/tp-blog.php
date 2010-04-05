@@ -79,4 +79,11 @@ class EntryListing {
          return $this->entry_array;
      }
 }
+
+function anon_comments_allowed($blog_xid) {
+   $doc = pull_json(get_blog_settings_api_url($blog_xid));
+   
+   
+   
+}
 ?>

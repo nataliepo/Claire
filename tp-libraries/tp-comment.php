@@ -15,8 +15,10 @@ class Comment {
    var $content;
    var $xid;
    var $timestamp;
-
+   var $blog_xid;
+   
    function Comment($params) {
+
 
       // this is a POST request.
       if (array_key_exists('post_xid', $params) &&
@@ -24,9 +26,21 @@ class Comment {
 
          if (array_key_exists('session', $params)) {
             $this->post_authenticated_comment($params);
+            return;
          }
          else {
-            debug ("Creation of new UnAuthenticated Comment...");
+            // Anonymous comment posts require the 'name' and 'href' AND EMAIL AND BLOG_XID parameters.
+            if ((array_key_exists('name', $params)) && 
+                (array_key_exists('href', $params)) &&
+                (array_key_exists('email', $params)) &&                
+                (array_key_exists('blog_xid', $params))) {
+               $this->post_anonymous_comment($params);
+            }
+            else {
+               debug ("[Comment::Comment] Anonymous comments require 'name', 'href', 'email', and 'blog_xid parameters.");
+               return;
+            }
+
          }
             
          return;
@@ -61,6 +75,29 @@ class Comment {
        
        function time() {
           return $this->timestamp->print_readable_time();
+       }
+
+
+       function post_anonymous_comment ($params) {
+
+          if (anon_comments_allowed($params['blog_xid'])) {
+             debug ("[post_anonymous_comment] post_xid = " . $params['post_xid']);
+        
+             $json = '{"content":"' . $params['content'] . '",' . 
+                       '"name":"'   . $params['name']    . '",' . 
+                       '"href":"'   . $params['href']    . '",' .
+                       '"email":"'  . $params['email']   . '"}';
+             debug ("[post_anonymous_comment] json = $json");
+
+             $typepad_url = get_comments_api_url ($params['post_xid']);
+             $response = post_text($typepad_url, $json);
+             debug ("[post_anonymous_comment] Response from TP Anon Comment Endpoint = $response");
+             //function post_text ($url, $params, $decode=1) {
+         }
+         else {
+            debug ("Anonymous comments aren't allowed.");
+         }
+          
        }
        
        function post_authenticated_comment ($params) {

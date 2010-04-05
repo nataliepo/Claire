@@ -85,6 +85,10 @@ function get_entry_api_url ($xid) {
    return ROOT_TYPEPAD_API_URL . '/assets/' . $xid . '.json';
 }
 
+function get_blog_settings_api_url($xid) {
+   return ROOT_TYPEPAD_API_URL . '/blogs/' . $xid . '/commenting-settings.json';
+}
+
 function get_comments_api_url ($xid, $is_auth=0) {
    $root = "";
     if ($is_auth) {
@@ -169,10 +173,12 @@ function post_text ($url, $params, $decode=1) {
    curl_setopt($ch, CURLOPT_HEADER, 0);
    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
    
-/*   curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-          "Content-Type: application/json;")); */
+   curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+          "Content-Type: application/json;")); 
       
    $result = curl_exec($ch);
+   var_dump($result);
+   debug ("[POST_TEXT] Result = ^");
    if ($decode) {
       return json_decode($result);
    }

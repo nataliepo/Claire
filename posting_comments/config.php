@@ -5,8 +5,9 @@
    define ("BLOG_XID", "6a0120a7ee9b66970b0120a7ee9b6d970b");    
    define ("FACEBOOK_POST_ID_PREFIX", "freebie-");
    
+   
 // LOCAL HOST SETTINGS...
-/* 
+
    define ('COOKIE_NAME', 'claire-comment-posting');
 
    define ('CONSUMER_KEY', '67738f8572da988f');
@@ -17,8 +18,10 @@
    define ('DB_USERNAME', 'rocky');
    define ('DB_PASSWORD', 'four');
    define ('DB_NAME', 'posting_comments');
-*/
 
+
+// DEV3 SETTINGS...
+/*
    define ('COOKIE_NAME', 'claire-session');
    
    define ('CONSUMER_KEY', '0ad999b15fb10bef');
@@ -29,7 +32,7 @@
    define ('DB_USERNAME', 'rocky');
    define ('DB_PASSWORD', 'four');
    define ('DB_NAME', 'oauth_test');
-
+*/
 
    include_once ('../tp-libraries/tp-utilities.php');
    include_once ("../oauth/oauth-php-98/library/OAuthStore.php");

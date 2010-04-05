@@ -15,6 +15,7 @@
             
             $user_session = new TPSession();
             
+            $anon_comments_allowed = anon_comments_allowed(BLOG_XID);
             
             // handle comment posts...
             if (array_key_exists('comment_text', $_POST)) {
@@ -24,12 +25,14 @@
                                                 'session'  => $user_session,
                                                 'content'  => $_POST['comment_text']));
                  }
-                 else {
+                 else if ($anon_comments_allowed) {
                     // Post anonymously.
                     $comment = new Comment(array('post_xid' => $post_xid,
                                                  'content'  => $_POST['comment_text'], 
                                                  'name'     => $_POST['comment_name'],
-                                                 'href'     => $_POST['comment_href']));
+                                                 'href'     => $_POST['comment_href'],
+                                                 'email'    => $_POST['comment_email'],
+                                                 'blog_xid' => BLOG_XID));
                  }
             }
      
@@ -99,11 +102,22 @@
                         
       <?php
          if (!$user_session->is_logged_in()) {      
-            echo "<h3><a href='login.php'>Sign In</a> or Comment Anonymously</h3>";
+            echo "<h3><a href='login.php'>Sign In</a>";
+            if ($anon_comments_allowed) {
+               echo " or Comment Anonymously";
+            }
+            else {
+               echo " to Comment";
+            }
+            echo "</h3>";
          }
          else {
             echo "<h3>Leave a Comment, <a href='" . $user_session->author->profile_url . "'>" . 
                $user_session->author->display_name . "</a>!</h3>";
+         }
+      
+         // show the comment form if they're logged in OR they allow anon comments.
+         if ($user_session->is_logged_in() || $anon_comments_allowed) {
       ?>
       <!-- comment form -->
       <form action="entry.php" method="post">
@@ -112,6 +126,8 @@
             if (!$user_session->is_logged_in()) {
                echo '<label>Your Name: </label> <input type="text" name="comment_name" /><br />';
                echo '<label>Your Website: </label> <input type="text" name="comment_href" /><br />';
+               echo '<label>Your Email: </label> <input type="text" name="comment_email" /><br />';
+
             }
          
          ?>
@@ -120,9 +136,9 @@
          <br />
          <input type="submit" value="send">
       </form>
-   <?php
+      <?php
          }
-   ?>      
+      ?>
       </div>
       
       <div id="beta"> 

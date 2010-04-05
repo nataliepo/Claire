@@ -121,8 +121,6 @@ class TPSession {
       // this writes the Author record to the db.
       $oauth_user_id = remember_author($this->author);
 
-//      debug ("[final_request] This author's id is $oauth_user_id");
-
       // Also create a cookie out of this author if one does not already exist.
       if (!array_key_exists(COOKIE_NAME, $_COOKIE)) {
          setcookie(COOKIE_NAME, $oauth_user_id);
