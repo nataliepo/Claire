@@ -194,7 +194,7 @@ function post_json ($url, $params) {
    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
           "Content-Type: application/json;"));
    
-   return json_decode(curl_exec($ch));
+   return claire_json_decode(curl_exec($ch));
 }
 
 function debug ($msg) {
