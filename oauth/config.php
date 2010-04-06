@@ -10,8 +10,6 @@
    define ('COOKIE_NAME', 'claire-session');
 
 
-   
-
 // THESE ARE THE LOCALHOST SETTINGS
 /*
    define ('CONSUMER_KEY', 'c5139cef2985b86d');

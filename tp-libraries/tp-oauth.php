@@ -17,6 +17,12 @@ class TPSession {
 
       return 0;
    }
+   
+   function has_all_tokens() {
+      $token = get_oauth_token_from_db($this->user_id, $_GET, $this->store);
+      
+
+   }
 
    // 
    function TPSession () {
@@ -194,7 +200,8 @@ class TPSession {
          // If we're catching an exception here, it's likely that a user is refreshing the page after
          // they've submitted once.  Try to use the DB-stored oauth token instead...
          try {
-            $r = $this->store->getServerTokenSecrets(CONSUMER_KEY, get_oauth_token_from_db(COOKIE_NAME, $_GET, $this->store),
+            $r = $this->store->getServerTokenSecrets(CONSUMER_KEY, 
+                                                    get_oauth_token_from_db($_COOKIE[COOKIE_NAME], $_GET, $this->store),
                                                    'request', $this->user_id);
          }
          catch (OAuthException2 $e) {
@@ -264,7 +271,7 @@ class TPSession {
          setcookie(COOKIE_NAME, $this->user_id);
 
       	// Ignore what's in the URL -- use what's in the DB.
-         $this->oauth_token = get_oauth_token_from_db(COOKIE_NAME, $_GET, $this->store);
+         $this->oauth_token = get_oauth_token_from_db($_COOKIE[COOKIE_NAME], $_GET, $this->store);
       }
       else {
          $this->oauth_token = "";
@@ -420,14 +427,16 @@ function get_oauth_token($cookie_name, $params, $store) {
    
    // 2. it resides in the DB.  key off of the user_id cookie.
    else if (array_key_exists($cookie_name, $_COOKIE)) {
-      $oauth_token = get_oauth_token_from_db($cookie_name, $params, $store);
+      $oauth_token = get_oauth_token_from_db($_COOKIE[$cookie_name], $params, $store);
    }
    
    return $oauth_token;
 }
 
-function get_oauth_token_from_db($cookie_name, $params, $store) {
-   $tokens = $store->listServerTokens($_COOKIE[$cookie_name]);
+function get_oauth_token_from_db($user_id, $params, $store) {
+//function get_oauth_token_from_db($user_id, $store) {
+   $tokens = $store->listServerTokens($user_id);
+//   $tokens = $store->listServerTokens($_COOKIE[COOKIE_NAME]);
 
     if (sizeof($tokens) >= 1) {
        return $oauth_token = $tokens[0]['token'];
