@@ -132,6 +132,9 @@ class TPSession {
          setcookie(COOKIE_NAME, $oauth_user_id);
       }
 
+      // this is important for other services using this obj...
+      $this->user_id = $oauth_user_id;
+      
       // When you begin the sign-on process, you're given a temporary user record
       // without its TypePad XID -- even if you already existed.  This block
       // makes the temporary request/access token your actual request/access tokens.
