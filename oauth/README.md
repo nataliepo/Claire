@@ -4,17 +4,18 @@
 - Create the OAuth database according to the definition here: 
       oauth/oauth-php-98/library/store/mysql/mysql.sql
 - Create the Users database to remember users' sessions.
-        mysql> create table users (user_id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (user_id), user_tp_xid varchar(20), user_name MEDIUMTEXT);
+        mysql> create table users (user_id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (user_id), user_tp_xid varchar(20), user_name MEDIUMTEXT, user_session_id varchar(20));
         
         mysql> show columns from users;
-        +-------------+-------------+------+-----+---------+----------------+
-        | Field       | Type        | Null | Key | Default | Extra          |
-        +-------------+-------------+------+-----+---------+----------------+
-        | user_id     | int(11)     | NO   | PRI | NULL    | auto_increment |
-        | user_tp_xid | varchar(20) | YES  |     | NULL    |                |
-        | user_name   | mediumtext  | YES  |     | NULL    |                |
-        +-------------+-------------+------+-----+---------+----------------+
-        3 rows in set (0.01 sec)
+        +-----------------+-------------+------+-----+---------+----------------+
+        | Field           | Type        | Null | Key | Default | Extra          |
+        +-----------------+-------------+------+-----+---------+----------------+
+        | user_id         | int(11)     | NO   | PRI | NULL    | auto_increment |
+        | user_tp_xid     | varchar(20) | YES  |     | NULL    |                |
+        | user_name       | mediumtext  | YES  |     | NULL    |                |
+        | user_session_id | varchar(20) | YES  |     | NULL    |                |
+        +-----------------+-------------+------+-----+---------+----------------+
+        4 rows in set (0.00 sec)
         
 
 - Schema sanity check -- you should have all of these tables: 

@@ -129,7 +129,8 @@ class TPSession {
 
       // Also create a cookie out of this author if one does not already exist.
       if (!array_key_exists(COOKIE_NAME, $_COOKIE)) {
-         setcookie(COOKIE_NAME, $oauth_user_id);
+         //setcookie(COOKIE_NAME, $oauth_user_id);
+         setcookie(COOKIE_NAME, get_session_id_from_user_id($oauth_user_id));
       }
 
       // this is important for other services using this obj...
@@ -138,10 +139,10 @@ class TPSession {
       // When you begin the sign-on process, you're given a temporary user record
       // without its TypePad XID -- even if you already existed.  This block
       // makes the temporary request/access token your actual request/access tokens.
-      if (($_COOKIE[COOKIE_NAME] != $oauth_user_id) && ($oauth_user_id)){
+      if ((get_user_id_from_session_id($_COOKIE[COOKIE_NAME]) != $oauth_user_id) && ($oauth_user_id)){
             
          // store the temporary user_id
-         $old_oauth_id = $_COOKIE[COOKIE_NAME];
+         $old_oauth_id = get_user_id_from_session_id($_COOKIE[COOKIE_NAME]);
 
          debug ("Replacing temporary oauth_oauthor credentials...");
 
@@ -150,7 +151,9 @@ class TPSession {
 
          // Correct your active cookie.
          debug ("Setting active cookie...");
-         setcookie(COOKIE_NAME, $oauth_user_id);
+         $session_id = get_session_id_from_user_id($oauth_user_id);
+         debug ("[update_author_record] session_id=$session_id when user_id = $oauth_user_id");
+         setcookie(COOKIE_NAME, get_session_id_from_user_id($oauth_user_id));
 
          // Remove the temporary user.
          debug ("Removing temporary author record...");
@@ -271,10 +274,10 @@ class TPSession {
                                       $this->user_id, $opts);                         
 
          // also putting this in a cookie.
-         setcookie(COOKIE_NAME, $this->user_id);
+         setcookie(COOKIE_NAME, get_session_id_from_user_id($this->user_id));
 
       	// Ignore what's in the URL -- use what's in the DB.
-         $this->oauth_token = get_oauth_token_from_db($_COOKIE[COOKIE_NAME], $_GET, $this->store);
+         $this->oauth_token = get_oauth_token_from_db(get_user_id_from_session_id($_COOKIE[COOKIE_NAME]), $_GET, $this->store);
       }
       else {
          $this->oauth_token = "";
@@ -307,7 +310,7 @@ class TPSession {
       
       // create a temp user and make a cookie for his record
       $this->user_id = create_temp_user();
-      setcookie(COOKIE_NAME, $this->user_id);
+      setcookie(COOKIE_NAME, get_session_id_from_user_id($this->user_id));
 
       // At this point, we shouldn't have anything in the DB with a record of this transaction.
       // Set up the required parameters to recognize an OAuth provider -- known in this OAuthPHP lib as
@@ -430,7 +433,7 @@ function get_oauth_token($cookie_name, $params, $store) {
    
    // 2. it resides in the DB.  key off of the user_id cookie.
    else if (array_key_exists($cookie_name, $_COOKIE)) {
-      $oauth_token = get_oauth_token_from_db($_COOKIE[$cookie_name], $params, $store);
+      $oauth_token = get_oauth_token_from_db(get_user_id_from_session_id($_COOKIE[$cookie_name]), $params, $store);
    }
    
    return $oauth_token;
@@ -452,29 +455,62 @@ function get_oauth_token_from_db($user_id, $params, $store) {
 function get_user_id($cookie_name, $create_ifne=0) {
    $user_id = 0;
    if (array_key_exists($cookie_name, $_COOKIE)) {
-      return $_COOKIE[$cookie_name];
+      return get_user_id_from_session_id($_COOKIE[$cookie_name]);
+//      return $_COOKIE[$cookie_name];
    }
    
    if ($create_ifne) {
-      $user_id =  create_temp_user();
-      setcookie(COOKIE_NAME, $user_id);
+      $session_id =  create_temp_user();
+      setcookie(COOKIE_NAME, $session_id);
+      $user_id = get_user_id_from_session_id($session_id);
    }
    
    return $user_id;
 }
 
+function get_user_id_from_session_id($session_id) {
+   $query = "SELECT * FROM users where user_session_id='$session_id';";
+   $result = mysql_query($query);
+
+   if (!$result ||
+       !mysql_num_rows($result)) {
+      return 0;
+   }
+   
+   // otherwise, it exists
+   return mysql_result($result, 0, "user_id");   
+}
+
+function get_session_id_from_user_id($user_id) {
+   $query = "SELECT * FROM users where user_id='$user_id';";
+   $result = mysql_query($query);
+
+   if (!$result ||
+       !mysql_num_rows($result)) {
+      return 0;
+   }
+   
+   // otherwise, it exists
+   return mysql_result($result, 0, "user_session_id");   
+}
+
+
 function create_temp_user() {
    // Make a temporary row.
 
    $rando = uniqid();
-   $query = "INSERT INTO users (user_tp_xid, user_name) VALUES ('$rando', '');"; 
+   $rando_2 = uniqid();
+   $query = "INSERT INTO users (user_tp_xid, user_name, user_session_id) VALUES ('$rando', '', '$rando_2');"; 
    $result = mysql_query($query);
    
    if (!$result) {
       debug ("[create_temp_user] QUERY INSERT WENT BAD");
    }
    
-   return get_id($rando);
+   $id =  get_id($rando);
+
+   debug ("[create_temp_user] Just created temp user with session_id=$id");
+   return $id;
 }
 
 function replace_oauth_author($old_author, $new_author) {
@@ -559,9 +595,11 @@ function remember_author ($author) {
 
     $escaped_name = str_replace("'", "\'", $author->display_name);
 
+    $rando = uniqid();
+    
     // otherwise, create a new record.
-    $query = "INSERT INTO users (user_tp_xid, user_name) VALUES ('" . 
-                $author->xid . "', '" . $escaped_name . "');";
+    $query = "INSERT INTO users (user_tp_xid, user_name, user_session_id) VALUES ('" . 
+                $author->xid . "', '" . $escaped_name . "', '$rando');";
    
     $result = mysql_query($query);
 

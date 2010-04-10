@@ -10,6 +10,7 @@
 
    // Obtain a Request token from TypePad.  
    $user_session->request_and_verify_request_token();
+   
       
    // Next step in the OAuth Dance: Redirect your user to the Provider.
    // this redirect() method is courtesy of our OAuthPHP lib. Parameters:
