@@ -170,7 +170,7 @@ function pull_json ($url, $decode=1) {
 }
 
 function post_text ($url, $params, $decode=1) {
-   debug ("[POST_TEXT], URL = $url ");
+   debug ("[POST_TEXT], URL = $url , params = $params");
    
    $ch = curl_init ($url);
    curl_setopt($ch, CURLOPT_POST, 1);
@@ -183,8 +183,7 @@ function post_text ($url, $params, $decode=1) {
           "Content-Type: application/json;")); 
       
    $result = curl_exec($ch);
-   var_dump($result);
-   debug ("[POST_TEXT] Result = ^");
+
    if ($decode) {
       return json_decode($result);
    }

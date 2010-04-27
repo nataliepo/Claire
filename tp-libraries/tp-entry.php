@@ -180,6 +180,14 @@ class Entry {
                 "content=" . $escaped_content . "&" . 
                 "HTML=1";
 
+   /*
+         $params = '{"xid":"' . $this->xid .'",' . 
+                 '"permalink":"' . $this->permalink . '",' . 
+                 '"fb_prefix":"' . FACEBOOK_POST_ID_PREFIX . '",' . 
+                 '"content":"' . $escaped_content . '",' .
+                 '"HTML":1}';
+   */
+
        return rousseaus_comments($params);
      }
     
@@ -237,9 +245,9 @@ class Entry {
  
 /*** Makes the Rousseau request. ***/
 function rousseaus_comments ($params) {
-//   return pull_json(ROUSSEAU_COMMENTS_URL . '?' . $params, 0);
+   return pull_json(ROUSSEAU_COMMENTS_URL . '?' . $params, 0);
 
-   return post_text(ROUSSEAU_COMMENTS_URL, $params, 0);
+//   return post_text(ROUSSEAU_COMMENTS_URL, $params, 0);
 } 
  
     
