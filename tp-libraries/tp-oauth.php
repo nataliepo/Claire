@@ -2,6 +2,10 @@
     include_once('tp-utilities.php');
 
 
+    define ("TP_OAUTH_AUTH_URL", "oauthAuthorizationUrl");
+    define ("TP_OAUTH_REQUEST_TOKEN_URL", "oauthRequestTokenUrl");
+    define ("TP_OAUTH_ACCESS_TOKEN_URL", "oauthAccessTokenUrl");
+
 class TPSession {
    var $endpoint_strs;
    var $store;
@@ -36,7 +40,6 @@ class TPSession {
       $this->user_id = get_user_id(COOKIE_NAME);
       debug ("[TPSession::TPSesssion], user_id = " . $this->user_id);
 
-//      debug ("This user's cookie is " . $this->user_id);
       
       // If there's no user_id in the cookie, then there's no session -- not logged in.
       if (!$this->user_id) {
@@ -69,7 +72,8 @@ class TPSession {
    
    function make_authorized_request($url, $params="") {
       // Make a dummy OAuth Request object so we can use its signed parameters
-      $oauth 	= new OAuthRequester($this->get_api_endpoint('oauth-access-token-endpoint'), 'GET');
+//      $oauth 	= new OAuthRequester($this->get_api_endpoint('oauth-access-token-endpoint'), 'GET');
+      $oauth 	= new OAuthRequester($this->get_api_endpoint(TP_OAUTH_ACCESS_TOKEN_URL), 'GET');
 
       // Grab the access secret_token
       $r = $this->store->getServerToken(CONSUMER_KEY, $this->oauth_token, $this->user_id);
@@ -175,9 +179,14 @@ class TPSession {
           $owner = $doc->owner;
 
           $endpoint_strs = array();
+          
+          /*
+         ** Links array deprecation happened in R51 (04/2010)
+
           $endpoint_strs['oauth-request-token-endpoint'] = "0";
           $endpoint_strs['oauth-authorization-page'] = "0";
           $endpoint_strs['oauth-access-token-endpoint'] = "0";
+
 
           foreach ($doc->owner->links as $link) {
              foreach (array_keys($endpoint_strs) as $str) {
@@ -186,6 +195,12 @@ class TPSession {
                 }
              }  
           }
+          */
+          
+          $this->api_endpoints['oauthRequestTokenUrl'] = $doc->owner->oauthRequestTokenUrl;
+          $this->api_endpoints['oauthAuthorizationUrl'] = $doc->owner->oauthAuthorizationUrl;
+          $this->api_endpoints['oauthAccessTokenUrl'] = $doc->owner->oauthAccessTokenUrl;
+          
        }
        
        return $this->api_endpoints[$endpoint];
@@ -217,10 +232,10 @@ class TPSession {
       }
 
       // make a generic Request object, and then sign it with the secret token
-      $oauth 	= new OAuthRequester($this->get_api_endpoint('oauth-access-token-endpoint'),'GET');
+      $oauth 	= new OAuthRequester($this->get_api_endpoint(TP_OAUTH_ACCESS_TOKEN_URL),'GET');
       $oauth->sign($this->user_id, $r);
 
-      $final_url = $this->get_api_endpoint('oauth-access-token-endpoint') . "?";
+      $final_url = $this->get_api_endpoint(TP_OAUTH_ACCESS_TOKEN_URL) . "?";
 
       $parameters = array('timestamp', 'nonce', 'consumer_key', 
                            'version', 'signature_method', 'signature', 'token');
@@ -320,9 +335,9 @@ class TPSession {
                       'consumer_secret'   => CONSUMER_SECRET,
                       'server_uri'        => ROOT_TYPEPAD_API_URL,
                       'signature_methods' => array('PLAINTEXT'),
-                      'request_token_uri' => $this->get_api_endpoint('oauth-request-token-endpoint'),
-                      'authorize_uri'     => $this->get_api_endpoint('oauth-authorization-page'),
-                      'access_token_uri'  => $this->get_api_endpoint('oauth-access-token-endpoint')
+                      'request_token_uri' => $this->get_api_endpoint(TP_OAUTH_REQUEST_TOKEN_URL),
+                      'authorize_uri'     => $this->get_api_endpoint(TP_OAUTH_AUTH_URL),
+                      'access_token_uri'  => $this->get_api_endpoint(TP_OAUTH_ACCESS_TOKEN_URL)
                   //  'signature_methods' => array('HMAC-SHA1', 'PLAINTEXT'),                         
                   //  'signature_methods' => array('MD5', 'PLAINTEXT'),
                   //  ** This one is not implemented yet in this PHP library.
@@ -356,14 +371,14 @@ class TPSession {
       $r		= $this->store->getServer(CONSUMER_KEY, $this->user_id);
 
       // This creates a generic Request object, so we'll have to fill in the rest...
-      $oauth 	= new OAuthRequester($this->get_api_endpoint('oauth-request-token-endpoint'), '', '');
+      $oauth 	= new OAuthRequester($this->get_api_endpoint(TP_OAUTH_REQUEST_TOKEN_URL), '', '');
       $oauth->setParam('oauth_callback', CALLBACK_URL);
 
       // ..and this adds more parameters, like the timestamp, nonce, version, signature method, etc
       $oauth->sign($this->user_id, $r);
 
       // Begin to build the URL string with the request token endpoint
-      $final_url = $this->get_api_endpoint('oauth-request-token-endpoint') . "?";
+      $final_url = $this->get_api_endpoint(TP_OAUTH_REQUEST_TOKEN_URL) . "?";
 
       $parameters = array('timestamp', 'callback', 'nonce', 'consumer_key', 
                           'version', 'signature_method', 'signature');
@@ -405,7 +420,7 @@ class TPSession {
       $this->store->addServerToken(CONSUMER_KEY, 'request', $response['oauth_token'], 
                                           $response['oauth_token_secret'], $this->user_id, '');
 
-      var_dump($oauth);
+//      var_dump($oauth);
 //      debug ("After creating a simple request token, store obj = ^ ");      
       
       $this->oauth_token = $response['oauth_token'];     

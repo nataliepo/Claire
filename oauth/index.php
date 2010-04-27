@@ -52,8 +52,9 @@
 
          if (sizeof($matches) > 0) {
             $author = new Author(array('xid' => $user['user_tp_xid']));
-            echo "<li><img src='" . $author->avatar . "' /> " . 
-                     "<a href='" . $author->profile_url . "'>". $author->display_name . "</a></li>";
+            echo "<li><img class='avatar' src='" . $author->avatar . "' /> " . 
+                     "<a href='" . $author->profile_url . "'>". 
+                     $author->display_name . "</a></li>";
          }
       }
       echo "</ul>";

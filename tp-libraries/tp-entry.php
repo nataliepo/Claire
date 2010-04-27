@@ -244,6 +244,3 @@ function rousseaus_comments ($params) {
  
     
 ?>
-
-
- 

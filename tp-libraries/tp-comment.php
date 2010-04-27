@@ -294,6 +294,3 @@ function braid_comments ($list1, $list2, $list3='') {
 }   
 
 ?>
-
-
- 

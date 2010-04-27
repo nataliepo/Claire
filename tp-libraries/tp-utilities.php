@@ -14,6 +14,8 @@ function get_resized_avatar ($user, $size) {
     // use the lilypad as a default in case all else fails
     $default_avatar = 'http://up3.typepad.com/6a00d83451c82369e20120a4e574c1970b-50si';
     
+    /*
+     *  The links arrays were deprecated in R51 (04/2010)
     $links_array = $user->links;
     foreach ($links_array as $link) {
         if ($link->rel == "avatar") {
@@ -21,6 +23,10 @@ function get_resized_avatar ($user, $size) {
                 return $link->href;
             } 
         }
+    }
+    */
+    if ($user->avatarLink) {
+       return $user->avatarLink->url;
     }
 
    return $default_avatar;

@@ -16,8 +16,15 @@
    // this redirect() method is courtesy of our OAuthPHP lib. Parameters:
    //   1 = the URL to redirect to
    //   2 = a list of parameters. In our case, it's the Request token.
-   OAuthRequest::redirect($user_session->get_api_endpoint('oauth-authorization-page'), 
+   /*
+    * 'oauth-authorization-page' is deprecated in favor of 'oauthAuthorizationUrl'.    
+      OAuthRequest::redirect($user_session->get_api_endpoint('oauth-authorization-page'), 
                           array('oauth_token' => $user_session->oauth_token));
+     */
+     
+     OAuthRequest::redirect($user_session->get_api_endpoint(TP_OAUTH_AUTH_URL), 
+                         array('oauth_token' => $user_session->oauth_token));
+     
 ?><?php
    // FYI: HTML is forbidden in this file, since the redirect's headers cannot be written!!
 ?>   

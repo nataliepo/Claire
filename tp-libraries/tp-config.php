@@ -9,6 +9,3 @@
     // required to use DateTime objects in php
     date_default_timezone_set('America/New_York');
 ?>
-
-
-
