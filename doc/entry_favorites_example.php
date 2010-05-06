@@ -3,8 +3,8 @@
 <head>
    <title>Claire</title>
    <?php 
-      include_once('../tp-libraries/tp-utilities.php'); 
       define ("DEFAULT_DEBUG_MODE", 1); 
+      include_once('../tp-libraries/tp-utilities.php'); 
    ?>
    
    <link rel="stylesheet" href="../tp-libraries/styles.css" type="text/css" />
