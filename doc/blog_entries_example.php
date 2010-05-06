@@ -3,8 +3,9 @@
 <head>
    <title>Claire</title>
    <?php 
-      include_once('../tp-libraries/tp-utilities.php'); 
       define ("DEFAULT_DEBUG_MODE", 1);
+   
+      include_once('../tp-libraries/tp-utilities.php'); 
 
       $page_number = 1;
       if (array_key_exists('page', $_GET)) {
@@ -36,7 +37,7 @@
       $entries_array = $blog_entry_listing->entries();
       foreach ($entries_array as $entry) {
          echo "<li><a href='" . $entry->permalink . "'>" . $entry->title . 
-            ", XID = " . $entry->xid . "<br /><br /></li>";
+            "</a>, XID = " . $entry->xid . "<br /><br /></li>";
       } 
       
       echo "</ul>";  

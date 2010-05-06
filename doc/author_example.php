@@ -3,8 +3,8 @@
 <head>
    <title>Claire</title>
    <?php 
-      include_once('../tp-libraries/tp-utilities.php'); 
       define ("DEFAULT_DEBUG_MODE", 1);
+      include_once('../tp-libraries/tp-utilities.php'); 
    ?>
    
    <link rel="stylesheet" href="../tp-libraries/styles.css" type="text/css" />
@@ -22,7 +22,7 @@
       
       foreach ($authors as $author_str) {
          $a = new Author(array('username' => $author_str));
-         echo "<li><img src='" . $a->avatar . "' /> " . 
+         echo "<li><img class='avatar' src='" . $a->avatar . "' /> " . 
             "<a href='" . $a->profile_url . "'>". 
             $a->display_name . "</a></li>";
       }   
