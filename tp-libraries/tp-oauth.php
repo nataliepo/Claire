@@ -101,8 +101,9 @@ class TPSession {
       // Package up the Authorization value as an array, along with the expected Content-Type
       $header_array = array('Authorization:' . $header_string,
                             'Content-Type: application/json;'); 
+      
                             
-//      debug ("[update_author_record] Making the request at url = $url with Authorization: $header_string");
+      debug ("[make_authorized_request] Making the request at url = $url with Authorization: $header_string");
 
       $ch = curl_init($url);   
       curl_setopt($ch, CURLOPT_RETURNTRANSFER,  true);

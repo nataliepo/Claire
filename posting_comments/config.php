@@ -17,7 +17,9 @@
    define ('DB_HOST', 'localhost');
    define ('DB_USERNAME', 'rocky');
    define ('DB_PASSWORD', 'four');
-   define ('DB_NAME', 'posting_comments');
+//   define ('DB_NAME', 'posting_comments');
+   define ('DB_NAME', 'oauth_test');
+   
 
 
 // DEV3 SETTINGS...
